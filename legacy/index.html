@@ -396,7 +396,6 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 </div>
 
 <div class="foot">
-  <p>設計は <a href="https://github.com/GenbuHase/Sakemem" target="_blank" rel="noopener">Sakemem</a> を参考にしています。カテゴリの下に<b>種類</b>を置き、種類によって評価軸が切り替わる構造（ワインの赤／白、ウイスキーのスコッチ／バーボンなど）、飲みものとペアリングを同格の記録として扱い<b>ペア</b>で結ぶ考え方、補助情報と場所を持つ点を取り入れました。</p>
   <p>コーヒーの評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。基礎点36点に、8項目（カップのきれいさ／甘さ／酸の質／口に含んだ質感／風味／後味の印象度／バランス／総合評価）を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安。実際のカッピングは0.5点刻みですが、ここでは1点刻みです。</p>
   <p>フレーバーの語彙は <b>SCA / World Coffee Research のコーヒーフレーバーホイール</b>の分類を、日本茶の「覆い香」「火香」などは日本茶の審査用語を参考にしました。焙煎度はライトからイタリアンまでの8段階で、丸の色はおおよその豆の色です。語彙は自分で足せます。追加した言葉はその系統の一覧に残り、記録した過去の一杯からは消えません。</p>
 </div>
@@ -916,7 +915,7 @@ function removeEntry(id){
     if(e.id === id){ gone = e; return false; }
     return true;
   });
-  /* ペアに1件しか残らなくなったら、その記録のペアも解く（Sakemem のペア整合ルール） */
+  /* ペアに1件しか残らなくなったら、その記録のペアも解く */
   var orphans = [];
   if(gone && gone.pairId){
     var rest = entries.filter(function(e){ return e.pairId === gone.pairId; });
