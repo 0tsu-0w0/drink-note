@@ -1,0 +1,941 @@
+<title>一杯台帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#E9EBE6; --surface:#F8F9F6; --surface-2:#F1F3EC;
+  --ink:#181B17; --ink-2:#3D433C; --muted:#6A7266;
+  --line:#D5D9CF; --line-strong:#BAC1B3;
+  --accent:#2C5B45; --accent-ink:#F8F9F6; --accent-soft:#DDE8E0;
+  --coffee:#6B4225; --tea:#A65A22; --green:#4C7A3C; --alcohol:#7C2F4E; --other:#3A6B87;
+  --warn:#A8701A; --over:#9E3A2C;
+  --shadow:0 1px 2px rgba(24,27,23,.07);
+  --glass:rgba(24,27,23,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#121513; --surface:#1A1E1B; --surface-2:#22261F;
+    --ink:#E8EBE4; --ink-2:#C2C8BC; --muted:#8D958A;
+    --line:#2C322D; --line-strong:#414940;
+    --accent:#74C09C; --accent-ink:#10201A; --accent-soft:#1E2F27;
+    --coffee:#C58F62; --tea:#E09A5E; --green:#93C579; --alcohol:#D98BAC; --other:#83B8D8;
+    --warn:#D9A650; --over:#E07C6A;
+    --shadow:0 1px 2px rgba(0,0,0,.45);
+    --glass:rgba(232,235,228,.05);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#121513; --surface:#1A1E1B; --surface-2:#22261F;
+  --ink:#E8EBE4; --ink-2:#C2C8BC; --muted:#8D958A;
+  --line:#2C322D; --line-strong:#414940;
+  --accent:#74C09C; --accent-ink:#10201A; --accent-soft:#1E2F27;
+  --coffee:#C58F62; --tea:#E09A5E; --green:#93C579; --alcohol:#D98BAC; --other:#83B8D8;
+  --warn:#D9A650; --over:#E07C6A;
+  --shadow:0 1px 2px rgba(0,0,0,.45);
+  --glass:rgba(232,235,228,.05);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.num{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,monospace; font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); font-weight:500;
+}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+button{font:inherit; color:inherit; cursor:pointer}
+input,select,textarea{font:inherit; color:inherit}
+
+/* ---------- masthead ---------- */
+.masthead{
+  border-bottom:1px solid var(--line-strong);
+  background:var(--surface);
+}
+.masthead-in{
+  max-width:1140px; margin:0 auto; padding:18px 24px 16px;
+  display:flex; align-items:baseline; justify-content:space-between; gap:20px; flex-wrap:wrap;
+}
+.wordmark{
+  font-family:"Shippori Mincho B1",serif; font-weight:800;
+  font-size:26px; letter-spacing:.14em; margin:0; line-height:1.2;
+}
+.wordmark span{color:var(--accent)}
+.tagline{color:var(--muted); font-size:12.5px; margin:2px 0 0; letter-spacing:.02em}
+.masthead-right{display:flex; align-items:center; gap:18px}
+.today-date{font-size:13px; color:var(--ink-2); line-height:1.4}
+.today-date b{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px; font-weight:500}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1140px; margin:0 auto; padding:24px; display:grid; grid-template-columns:352px minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:900px){ .wrap{grid-template-columns:1fr; padding:18px; gap:22px} }
+
+.panel{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:4px; box-shadow:var(--shadow);
+}
+.panel-head{
+  padding:13px 16px 11px; border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.panel-title{font-family:"Shippori Mincho B1",serif; font-weight:600; font-size:15.5px; letter-spacing:.06em; margin:0}
+
+/* ---------- composer ---------- */
+.composer-body{padding:16px; display:flex; flex-direction:column; gap:15px}
+.field{display:flex; flex-direction:column; gap:6px; min-width:0}
+.field > label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{
+  border:1px solid var(--line-strong); background:transparent; color:var(--ink-2);
+  padding:5px 11px; border-radius:2px; font-size:12.5px; line-height:1.4;
+  display:inline-flex; align-items:center; gap:6px; transition:background .12s, border-color .12s, color .12s;
+}
+.chip:hover{border-color:var(--ink-2)}
+.chip .dot{width:7px; height:7px; border-radius:50%; flex:none}
+.chip[aria-pressed="true"]{background:var(--cat); border-color:var(--cat); color:var(--accent-ink)}
+.chip[aria-pressed="true"] .dot{background:currentColor !important; opacity:.6}
+.chip.preset{font-size:12px; padding:4px 9px; color:var(--muted); border-style:dashed}
+.chip.preset:hover{color:var(--ink); border-style:solid; border-color:var(--cat)}
+
+input[type=text],input[type=number],input[type=datetime-local],textarea{
+  width:100%; background:var(--surface-2); border:1px solid var(--line-strong);
+  border-radius:2px; padding:8px 10px; color:var(--ink);
+}
+input[type=number]{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums}
+textarea{resize:vertical; min-height:52px; line-height:1.6}
+input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
+
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.unit-input{position:relative}
+.unit-input .unit{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  font-size:11.5px; color:var(--muted); pointer-events:none;
+}
+.unit-input input{padding-right:34px}
+.quick{display:flex; gap:5px; margin-top:2px; flex-wrap:wrap}
+.quick button{
+  background:transparent; border:1px solid var(--line); border-radius:2px;
+  padding:2px 7px; font-size:11.5px; color:var(--muted);
+  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums;
+}
+.quick button:hover{color:var(--ink); border-color:var(--line-strong)}
+
+.stars{display:flex; gap:2px; align-items:center}
+.star{
+  background:none; border:0; padding:1px 2px; font-size:19px; line-height:1;
+  color:var(--line-strong); transition:color .1s;
+}
+.star.on{color:var(--warn)}
+.star:hover{color:var(--warn)}
+.star-clear{background:none; border:0; font-size:11.5px; color:var(--muted); margin-left:6px; padding:2px 4px}
+.star-clear:hover{color:var(--ink)}
+
+.derived{
+  display:flex; gap:14px; flex-wrap:wrap; padding:9px 11px;
+  background:var(--surface-2); border-left:2px solid var(--cat);
+  font-size:12px; color:var(--muted);
+}
+.derived b{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-weight:500; color:var(--ink); font-size:13px}
+
+.submit{
+  background:var(--accent); color:var(--accent-ink); border:0; border-radius:2px;
+  padding:11px 14px; font-weight:700; letter-spacing:.1em; font-size:13.5px;
+  transition:filter .12s;
+}
+.submit:hover{filter:brightness(1.08)}
+.hint{font-size:11.5px; color:var(--muted); margin:0; text-align:center}
+
+/* ---------- meters ---------- */
+.today{display:grid; grid-template-columns:auto auto minmax(0,1fr); gap:22px; padding:16px; align-items:start}
+@media (max-width:620px){ .today{grid-template-columns:1fr 1fr; gap:16px} .today .totals{grid-column:1/-1} }
+.meter{display:flex; flex-direction:column; align-items:center; gap:5px; width:132px}
+.meter svg{display:block; width:80px; height:96px}
+.meter-label{font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase}
+.meter-val{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px; font-weight:500}
+.meter-val .of{color:var(--muted); font-size:12px; font-weight:400}
+.meter-note{font-size:11px; color:var(--muted); text-align:center; line-height:1.5}
+.meter-note.over{color:var(--over); font-weight:500}
+.totals{border-left:1px solid var(--line); padding-left:22px; display:flex; flex-direction:column; gap:9px}
+@media (max-width:620px){ .totals{border-left:0; border-top:1px solid var(--line); padding:14px 0 0} }
+.tline{display:flex; align-items:center; gap:10px; justify-content:space-between}
+.tline .k{font-size:12.5px; color:var(--muted); flex:none}
+.tline .v{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:14px; flex:none}
+.tline .v small{color:var(--muted); font-size:11.5px; margin-left:2px}
+.tline .bar{flex:1; height:3px; background:var(--line); position:relative; min-width:40px}
+.tline .bar i{position:absolute; inset:0 auto 0 0; background:var(--c)}
+
+/* ---------- week chart ---------- */
+.chartbox{padding:8px 16px 12px; overflow-x:auto}
+.chartbox svg{display:block; width:100%; min-width:420px; height:auto}
+.axis-txt{font-family:"Roboto Mono",monospace; font-size:10px; fill:var(--muted)}
+.day-txt{font-size:11px; fill:var(--muted); font-family:"Zen Kaku Gothic New",sans-serif}
+.day-txt.now{fill:var(--ink); font-weight:700}
+
+/* ---------- filters ---------- */
+.filters{
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  padding:12px 16px; border-bottom:1px solid var(--line);
+}
+.filters .chips{flex:1}
+.search{max-width:190px; flex:none}
+.search input{padding:6px 10px; font-size:12.5px}
+
+/* ---------- ledger ---------- */
+.daygroup{border-bottom:1px solid var(--line)}
+.daygroup:last-child{border-bottom:0}
+.dayhead{
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  padding:11px 16px 8px; background:var(--surface-2);
+  border-bottom:1px solid var(--line);
+}
+.daydate{font-family:"Shippori Mincho B1",serif; font-size:15px; font-weight:600; letter-spacing:.05em}
+.daydate .wd{font-size:12px; color:var(--muted); margin-left:5px; font-family:"Zen Kaku Gothic New",sans-serif; letter-spacing:0}
+.daysum{font-size:11.5px; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums}
+
+.entry{
+  display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:0 12px;
+  padding:10px 16px; align-items:start; border-bottom:1px dotted var(--line);
+}
+.entry:last-child{border-bottom:0}
+.entry:hover{background:var(--glass)}
+.entry .time{
+  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums;
+  font-size:12.5px; color:var(--muted); padding-top:2px;
+}
+.entry .main{min-width:0}
+.entry .nm{display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+.entry .swatch{width:9px; height:9px; border-radius:50%; background:var(--c); flex:none}
+.entry .title{font-weight:500; font-size:14.5px}
+.entry .catname{font-size:11px; color:var(--c); letter-spacing:.06em}
+.entry .rate{color:var(--warn); font-size:12px; letter-spacing:1px}
+.entry .metrics{
+  display:flex; gap:11px; flex-wrap:wrap; font-size:11.5px; color:var(--muted);
+  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; margin-top:1px;
+}
+.entry .memo{font-size:12.5px; color:var(--ink-2); margin-top:3px; overflow-wrap:anywhere}
+.entry .acts{display:flex; gap:4px; opacity:0; transition:opacity .12s}
+.entry:hover .acts,.entry:focus-within .acts{opacity:1}
+@media (hover:none){ .entry .acts{opacity:1} }
+.iconbtn{
+  background:transparent; border:1px solid var(--line); border-radius:2px;
+  font-size:11.5px; padding:3px 8px; color:var(--muted); white-space:nowrap;
+}
+.iconbtn:hover{color:var(--ink); border-color:var(--line-strong)}
+.iconbtn.danger:hover{color:var(--over); border-color:var(--over)}
+
+.samplebar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  padding:9px 16px; background:var(--accent-soft); border-bottom:1px solid var(--line);
+  font-size:12.5px; color:var(--ink-2);
+}
+.badge-sample{
+  font-size:10px; letter-spacing:.1em; border:1px solid var(--line-strong);
+  padding:0 5px; border-radius:2px; color:var(--muted);
+}
+.empty{padding:40px 16px; text-align:center; color:var(--muted); font-size:13px}
+
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
+  background:var(--ink); color:var(--ground); padding:9px 14px; border-radius:3px;
+  display:flex; align-items:center; gap:14px; font-size:13px; box-shadow:0 6px 20px rgba(0,0,0,.25);
+  z-index:20; max-width:90vw;
+}
+.toast button{background:none; border:0; color:var(--accent); font-weight:700; padding:0; white-space:nowrap}
+.foot{
+  max-width:1140px; margin:0 auto; padding:4px 24px 34px;
+  font-size:11.5px; color:var(--muted); line-height:1.9; max-width:min(1140px,72ch);
+}
+.foot b{font-weight:500; color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
+</style>
+
+<header class="masthead">
+  <div class="masthead-in">
+    <div>
+      <h1 class="wordmark">一杯<span>台帳</span></h1>
+      <p class="tagline">珈琲も紅茶もお酒も、一杯ずつ書き留めておく。</p>
+    </div>
+    <div class="masthead-right">
+      <div class="today-date"><span class="eyebrow">本日</span><br><b id="mastDate">—</b></div>
+      <button class="iconbtn" id="exportBtn" hidden>CSVで書き出す</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- ============ 記録フォーム ============ -->
+  <aside class="panel">
+    <div class="panel-head"><h2 class="panel-title">一杯を記す</h2><span class="eyebrow" id="saveMode">端末に保存</span></div>
+    <form class="composer-body" id="form" autocomplete="off">
+      <div class="field">
+        <label>種類</label>
+        <div class="chips" id="catChips"></div>
+      </div>
+
+      <div class="field">
+        <label>よく飲むもの</label>
+        <div class="chips" id="presetChips"></div>
+      </div>
+
+      <div class="field">
+        <label for="fName">名前</label>
+        <input type="text" id="fName" placeholder="ドリップコーヒー" required>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="fMl">量</label>
+          <div class="unit-input"><input type="number" id="fMl" min="1" max="5000" step="10" value="150"><span class="unit">ml</span></div>
+          <div class="quick" id="mlQuick"></div>
+        </div>
+        <div class="field" id="abvField">
+          <label for="fAbv">度数</label>
+          <div class="unit-input"><input type="number" id="fAbv" min="0" max="96" step="0.5" value="5"><span class="unit">%</span></div>
+          <div class="quick" id="abvQuick"></div>
+        </div>
+        <div class="field" id="cafField">
+          <label for="fCaf">カフェイン</label>
+          <div class="unit-input"><input type="number" id="fCaf" min="0" max="1000" step="5" value="90"><span class="unit">mg</span></div>
+          <div class="quick" id="cafQuick"><button type="button" data-caf="0">0</button><button type="button" data-caf="60">60</button><button type="button" data-caf="90">90</button><button type="button" data-caf="140">140</button></div>
+        </div>
+      </div>
+
+      <div class="derived" id="derived"></div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="fWhen">日時</label>
+          <input type="datetime-local" id="fWhen">
+        </div>
+        <div class="field">
+          <label>評価</label>
+          <div class="stars" id="stars"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fMemo">メモ</label>
+        <textarea id="fMemo" placeholder="豆はエチオピア。浅煎りで柑橘の酸。"></textarea>
+      </div>
+
+      <button type="submit" class="submit">台帳に記す</button>
+      <p class="hint" id="formHint">記録は自動で保存されます</p>
+    </form>
+  </aside>
+
+  <!-- ============ 台帳本体 ============ -->
+  <section style="display:flex; flex-direction:column; gap:22px; min-width:0">
+    <div class="panel">
+      <div class="panel-head"><h2 class="panel-title">今日のグラス</h2><span class="eyebrow" id="todayCount">0杯</span></div>
+      <div class="today" id="today"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2 class="panel-title">この7日間</h2><span class="eyebrow">1日あたりの杯数</span></div>
+      <div class="chartbox" id="chartbox"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2 class="panel-title">台帳</h2><span class="eyebrow" id="ledgerCount"></span></div>
+      <div class="filters">
+        <div class="chips" id="filterChips"></div>
+        <div class="search"><input type="text" id="searchBox" placeholder="名前・メモを検索" aria-label="名前・メモを検索"></div>
+      </div>
+      <div id="sampleBar"></div>
+      <div id="ledger"></div>
+    </div>
+  </section>
+</div>
+
+<p class="foot">
+  目安の出典 ── カフェインは健康な成人で <b>1日400mg・1回200mg</b> まで（EFSA, 2015）。
+  純アルコールは <b>1日20g</b> が「節度ある適度な飲酒」で、生活習慣病のリスクが高まる量は男性40g・女性20g以上（厚生労働省 健康日本21／飲酒ガイドライン）。
+  純アルコール量(g) = 量(ml) × 度数(%) ÷ 100 × 0.8。プリセットのカフェイン量は一般的な浸出値からの概算で、実際の値は豆・茶葉・淹れ方で大きく変わります。目安であり、医学的な助言ではありません。
+</p>
+
+<script>
+"use strict";
+
+/* ---------- 種類と、その液の色 ---------- */
+var CATS = {
+  coffee : {label:"珈琲",   color:"var(--coffee)"},
+  tea    : {label:"紅茶",   color:"var(--tea)"},
+  green  : {label:"日本茶", color:"var(--green)"},
+  alcohol: {label:"お酒",   color:"var(--alcohol)"},
+  other  : {label:"その他", color:"var(--other)"}
+};
+var CAT_KEYS = ["coffee","tea","green","alcohol","other"];
+
+/* 定番。caf は 100ml あたりの mg、abv は度数(%) */
+var PRESETS = {
+  coffee : [
+    {name:"ドリップコーヒー", ml:150, caf:60},
+    {name:"エスプレッソ",     ml:30,  caf:212},
+    {name:"カフェラテ",       ml:200, caf:40},
+    {name:"インスタント",     ml:150, caf:57},
+    {name:"カフェインレス",   ml:150, caf:2}
+  ],
+  tea : [
+    {name:"紅茶",         ml:150, caf:30},
+    {name:"ミルクティー", ml:200, caf:22},
+    {name:"アールグレイ", ml:150, caf:30},
+    {name:"チャイ",       ml:200, caf:25}
+  ],
+  green : [
+    {name:"煎茶",     ml:150, caf:20},
+    {name:"玉露",     ml:60,  caf:160},
+    {name:"ほうじ茶", ml:150, caf:20},
+    {name:"抹茶",     ml:70,  caf:64},
+    {name:"麦茶",     ml:200, caf:0}
+  ],
+  alcohol : [
+    {name:"ビール",         ml:350, abv:5},
+    {name:"ハイボール",     ml:350, abv:7},
+    {name:"日本酒（一合）", ml:180, abv:15},
+    {name:"ワイン",         ml:120, abv:12},
+    {name:"レモンサワー",   ml:350, abv:5},
+    {name:"ウイスキー",     ml:30,  abv:40},
+    {name:"焼酎の水割り",   ml:200, abv:10}
+  ],
+  other : [
+    {name:"水",               ml:200, caf:0},
+    {name:"炭酸水",           ml:350, caf:0},
+    {name:"オレンジジュース", ml:200, caf:0},
+    {name:"コーラ",           ml:350, caf:10},
+    {name:"エナジードリンク", ml:250, caf:32}
+  ]
+};
+var ML_QUICK  = [30, 100, 150, 200, 350, 500];
+var ABV_QUICK = [5, 7, 12, 15, 40];
+var CAF_LIMIT = 400;   /* mg / 日 */
+var ALC_LIMIT = 20;    /* g / 日 */
+
+/* ---------- 状態 ---------- */
+var LS_KEY = "ichihai-daicho.v1";
+var LS_MIGRATED = "ichihai-daicho.migrated";
+var entries = [];
+var store = null;
+var usingSample = false;
+var draft = {cat:"coffee", rating:0, cafRate:60};
+var filter = "all";
+var search = "";
+var undoTimer = null;
+var sampleCache = null;
+
+/* ---------- 小道具 ---------- */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function pad(n){ return String(n).padStart(2,"0"); }
+var WD = ["日","月","火","水","木","金","土"];
+function dayKey(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function toLocalInput(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes()); }
+function alcoholG(e){ return (e.cat === "alcohol" && e.abv) ? e.ml * e.abv / 100 * 0.8 : 0; }
+function round1(n){ return Math.round(n*10)/10; }
+function newId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function catOf(k){ return CATS[k] || CATS.other; }
+
+/* ---------- 表示例（最初の一杯を記すまで） ---------- */
+function sampleEntries(){
+  if(sampleCache) return sampleCache;
+  var base = new Date();
+  function at(back, h, m){
+    var d = new Date(base); d.setDate(d.getDate()-back); d.setHours(h,m,0,0); return d.toISOString();
+  }
+  sampleCache = [
+    {id:"sample-1", ts:at(0,8,15),  cat:"coffee",  name:"ドリップコーヒー", ml:150, abv:null, caf:90, rating:4, memo:"浅煎り。柑橘の酸が気持ちいい。"},
+    {id:"sample-2", ts:at(0,11,30), cat:"green",   name:"煎茶",             ml:150, abv:null, caf:30, rating:0, memo:""},
+    {id:"sample-3", ts:at(0,15,0),  cat:"tea",     name:"ミルクティー",     ml:200, abv:null, caf:44, rating:3, memo:"茶葉はアッサム。"},
+    {id:"sample-4", ts:at(1,9,10),  cat:"coffee",  name:"カフェラテ",       ml:200, abv:null, caf:80, rating:5, memo:""},
+    {id:"sample-5", ts:at(1,19,40), cat:"alcohol", name:"ビール",           ml:350, abv:5,    caf:0,  rating:4, memo:"仕事あがりの一杯。"},
+    {id:"sample-6", ts:at(2,20,15), cat:"alcohol", name:"日本酒（一合）",   ml:180, abv:15,   caf:0,  rating:5, memo:"燗で。秋あがり。"},
+    {id:"sample-7", ts:at(3,7,50),  cat:"coffee",  name:"エスプレッソ",     ml:30,  abv:null, caf:64, rating:4, memo:""}
+  ];
+  return sampleCache;
+}
+function view(){ return usingSample ? sampleEntries() : entries; }
+
+/* ================= フォーム ================= */
+function buildCatChips(){
+  $("catChips").innerHTML = CAT_KEYS.map(function(k){
+    return '<button type="button" class="chip" data-cat="'+k+'" style="--cat:'+CATS[k].color+'" aria-pressed="false">'+
+      '<span class="dot" style="background:'+CATS[k].color+'"></span>'+CATS[k].label+'</button>';
+  }).join("");
+  $("catChips").addEventListener("click", function(e){
+    var b = e.target.closest("[data-cat]"); if(!b) return;
+    setCat(b.dataset.cat);
+  });
+}
+function setCat(cat){
+  draft.cat = cat;
+  Array.prototype.forEach.call($("catChips").children, function(b){
+    b.setAttribute("aria-pressed", String(b.dataset.cat === cat));
+  });
+  $("abvField").hidden = cat !== "alcohol";
+  $("cafField").hidden = cat === "alcohol";
+  buildPresets();
+  updateDerived();
+}
+function buildPresets(){
+  $("presetChips").innerHTML = PRESETS[draft.cat].map(function(p, i){
+    return '<button type="button" class="chip preset" data-i="'+i+'" style="--cat:'+CATS[draft.cat].color+'">'+esc(p.name)+'</button>';
+  }).join("");
+}
+function buildQuick(){
+  $("mlQuick").innerHTML  = ML_QUICK.map(function(v){ return '<button type="button" data-ml="'+v+'">'+v+'</button>'; }).join("");
+  $("abvQuick").innerHTML = ABV_QUICK.map(function(v){ return '<button type="button" data-abv="'+v+'">'+v+'%</button>'; }).join("");
+}
+function buildStars(){
+  $("stars").innerHTML =
+    [1,2,3,4,5].map(function(n){ return '<button type="button" class="star" data-n="'+n+'" aria-label="'+n+'点">★</button>'; }).join("") +
+    '<button type="button" class="star-clear" id="starClear">消す</button>';
+  paintStars();
+}
+function paintStars(){
+  Array.prototype.forEach.call($("stars").querySelectorAll(".star"), function(s){
+    s.classList.toggle("on", Number(s.dataset.n) <= draft.rating);
+  });
+}
+function updateDerived(){
+  var ml = Number($("fMl").value) || 0;
+  var parts = ['<span>量 <b>'+ml+'</b> ml</span>'];
+  if(draft.cat === "alcohol"){
+    var abv = Number($("fAbv").value) || 0;
+    var g = ml * abv / 100 * 0.8;
+    parts.push('<span>純アルコール <b>'+round1(g)+'</b> g</span>');
+    parts.push('<span>1日20gの <b>'+Math.round(g / ALC_LIMIT * 100)+'</b>%</span>');
+  }else{
+    var caf = Number($("fCaf").value) || 0;
+    parts.push('<span>カフェイン <b>'+caf+'</b> mg</span>');
+    parts.push('<span>1日400mgの <b>'+Math.round(caf / CAF_LIMIT * 100)+'</b>%</span>');
+  }
+  var box = $("derived");
+  box.innerHTML = parts.join("");
+  box.style.setProperty("--cat", CATS[draft.cat].color);
+}
+
+/* ================= 保存 ================= */
+function loadLocal(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    entries = raw ? (JSON.parse(raw) || []) : [];
+  }catch(err){ entries = []; }
+}
+function saveLocal(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(entries)); }catch(err){}
+}
+function sortEntries(){ entries.sort(function(a,b){ return b.ts.localeCompare(a.ts); }); }
+
+function addEntry(entry){
+  usingSample = false;
+  entries = entries.filter(function(e){ return e.id !== entry.id; });
+  entries.push(entry);
+  sortEntries(); saveLocal(); renderAll();
+  if(store){
+    store.collection("drinks").doc(entry.id).set(entry).catch(noteDbError);
+  }
+}
+function removeEntry(id){
+  var gone = null;
+  entries = entries.filter(function(e){
+    if(e.id === id){ gone = e; return false; }
+    return true;
+  });
+  saveLocal(); renderAll();
+  if(store){ store.collection("drinks").doc(id).delete().catch(noteDbError); }
+  showUndo(gone);
+}
+function noteDbError(err){
+  var code = err && err.code;
+  var msg = "サーバーに保存できませんでした。この端末には残っています。";
+  if(code === "quota_exceeded") msg = "保存できる記録が上限に達しました。古い記録を削除してください。";
+  else if(code === "resource_exhausted") msg = "操作が集中しています。少し待ってからもう一度お試しください。";
+  $("formHint").textContent = msg;
+}
+
+function connect(){
+  if(!window.claude || typeof window.claude.use !== "function") return;
+
+  window.claude.use("db").then(function(db){
+    if(!db) return;
+    store = db;
+    $("saveMode").textContent = "オンラインに保存";
+    var col = db.collection("drinks");
+    col.orderBy("ts","desc").limit(1000).onSnapshot(function(snap){
+      var remote = snap.docs.map(function(d){
+        var o = Object.assign({}, d.data()); o.id = d.id; return o;
+      });
+      if(remote.length === 0 && entries.length > 0 && !localStorage.getItem(LS_MIGRATED)){
+        try{ localStorage.setItem(LS_MIGRATED, "1"); }catch(err){}
+        entries.forEach(function(e){ col.doc(e.id).set(e).catch(noteDbError); });
+        return;
+      }
+      try{ localStorage.setItem(LS_MIGRATED, "1"); }catch(err){}
+      entries = remote; sortEntries(); saveLocal();
+      if(entries.length > 0) usingSample = false;
+      renderAll();
+    }, function(err){
+      store = null;
+      $("saveMode").textContent = "端末に保存";
+      noteDbError(err);
+    });
+  }).catch(function(){});
+
+  window.claude.use("downloads").then(function(dl){
+    if(!dl) return;
+    var btn = $("exportBtn");
+    btn.hidden = false;
+    btn.addEventListener("click", function(){
+      var rows = [["日時","種類","名前","量(ml)","度数(%)","カフェイン(mg)","純アルコール(g)","評価","メモ"]];
+      view().slice().sort(function(a,b){ return a.ts.localeCompare(b.ts); }).forEach(function(e){
+        var d = new Date(e.ts);
+        rows.push([
+          d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes()),
+          catOf(e.cat).label, e.name, e.ml, (e.abv == null ? "" : e.abv),
+          e.caf || 0, round1(alcoholG(e)), e.rating || "", (e.memo || "").replace(/\n/g, " ")
+        ]);
+      });
+      var csv = "﻿" + rows.map(function(r){
+        return r.map(function(c){ return '"' + String(c).replace(/"/g, '""') + '"'; }).join(",");
+      }).join("\r\n");
+      dl.save({filename:"drink-log-" + dayKey(new Date()) + ".csv", data:csv}).catch(function(err){
+        if(err && err.code !== "declined") btn.textContent = "書き出せませんでした";
+      });
+    });
+  }).catch(function(){});
+}
+
+/* ================= 今日のグラス ================= */
+var glassSeq = 0;
+function glassSVG(pct, color, over){
+  var top = 14, bottom = 108;
+  var p = Math.max(0, Math.min(1, pct));
+  var y = bottom - (bottom - top) * p;
+  var uid = "glass" + (++glassSeq);
+  var shape = "M22 12 H76 L68 100 Q67 108 59 108 H39 Q31 108 30 100 Z";
+  var edge = over ? "var(--over)" : "var(--line-strong)";
+  var liquid = "";
+  if(p > 0.004){
+    var op = over ? "1" : "0.82";
+    liquid =
+      '<rect x="0" y="'+(y + 4)+'" width="98" height="'+(120 - y)+'" fill="'+color+'" opacity="'+op+'"/>' +
+      '<path d="M0 '+(y + 5)+' Q24 '+(y - 3)+' 49 '+(y + 4)+' T98 '+(y + 5)+' V'+(y + 14)+' H0 Z" fill="'+color+'" opacity="'+op+'"/>';
+  }
+  return '<svg viewBox="0 0 98 118" role="img" aria-hidden="true" focusable="false">' +
+    '<defs><clipPath id="'+uid+'"><path d="'+shape+'"/></clipPath></defs>' +
+    '<path d="'+shape+'" fill="var(--surface-2)"/>' +
+    '<g clip-path="url(#'+uid+')">' + liquid + '</g>' +
+    '<path d="'+shape+'" fill="none" stroke="'+edge+'" stroke-width="1.6"/>' +
+    '<line x1="22" y1="12" x2="76" y2="12" stroke="'+edge+'" stroke-width="1.6"/>' +
+  '</svg>';
+}
+function renderToday(){
+  var list = view();
+  var key = dayKey(new Date());
+  var today = list.filter(function(e){ return dayKey(new Date(e.ts)) === key; });
+  var caf = today.reduce(function(s,e){ return s + (e.caf || 0); }, 0);
+  var alc = today.reduce(function(s,e){ return s + alcoholG(e); }, 0);
+  var ml  = today.reduce(function(s,e){ return s + (e.ml || 0); }, 0);
+  var cafOver = caf > CAF_LIMIT, alcOver = alc > ALC_LIMIT;
+
+  var byCat = CAT_KEYS.map(function(k){
+    return {k:k, n: today.filter(function(e){ return e.cat === k; }).length};
+  }).filter(function(x){ return x.n > 0; });
+  var maxN = Math.max.apply(null, [1].concat(byCat.map(function(x){ return x.n; })));
+
+  $("todayCount").textContent = today.length + "杯";
+
+  var cafNote = cafOver ? "1日の目安 400mg を超えています"
+                        : "目安まであと " + Math.round(CAF_LIMIT - caf) + "mg";
+  var alcNote = alcOver ? "適度な飲酒 20g を超えています"
+                        : (alc > 0 ? "適量まであと " + round1(ALC_LIMIT - alc) + "g" : "今日はまだ飲んでいません");
+
+  var totals = byCat.length
+    ? byCat.map(function(x){
+        return '<div class="tline" style="--c:'+CATS[x.k].color+'"><span class="k">'+CATS[x.k].label+'</span>' +
+          '<span class="bar"><i style="width:'+(x.n / maxN * 100)+'%"></i></span>' +
+          '<span class="v">'+x.n+'<small>杯</small></span></div>';
+      }).join("")
+    : '<div class="tline"><span class="k">まだ今日の記録はありません</span></div>';
+
+  $("today").innerHTML =
+    '<div class="meter">' +
+      glassSVG(caf / CAF_LIMIT, "var(--coffee)", cafOver) +
+      '<div class="meter-label">カフェイン</div>' +
+      '<div class="meter-val">'+Math.round(caf)+'<span class="of"> / '+CAF_LIMIT+' mg</span></div>' +
+      '<div class="meter-note'+(cafOver ? " over" : "")+'">'+cafNote+'</div>' +
+    '</div>' +
+    '<div class="meter">' +
+      glassSVG(alc / ALC_LIMIT, "var(--alcohol)", alcOver) +
+      '<div class="meter-label">純アルコール</div>' +
+      '<div class="meter-val">'+round1(alc)+'<span class="of"> / '+ALC_LIMIT+' g</span></div>' +
+      '<div class="meter-note'+(alcOver ? " over" : "")+'">'+alcNote+'</div>' +
+    '</div>' +
+    '<div class="totals">' +
+      '<div class="tline"><span class="k">杯数</span><span class="v">'+today.length+'<small>杯</small></span></div>' +
+      '<div class="tline"><span class="k">総量</span><span class="v">'+ml+'<small>ml</small></span></div>' +
+      totals +
+    '</div>';
+}
+
+/* ================= 7日間のチャート ================= */
+function renderChart(){
+  var list = view();
+  var days = [];
+  for(var i = 6; i >= 0; i--){
+    var d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - i);
+    var k = dayKey(d);
+    var counts = {}; CAT_KEYS.forEach(function(c){ counts[c] = 0; });
+    list.forEach(function(e){
+      if(dayKey(new Date(e.ts)) === k) counts[e.cat] = (counts[e.cat] || 0) + 1;
+    });
+    var total = CAT_KEYS.reduce(function(s,c){ return s + counts[c]; }, 0);
+    days.push({d:d, counts:counts, total:total});
+  }
+  var peak = Math.max.apply(null, [1].concat(days.map(function(x){ return x.total; })));
+  var max = peak <= 4 ? 4 : Math.ceil(peak / 2) * 2;
+
+  var W = 560, H = 188, padL = 30, padR = 10, padT = 14, padB = 34;
+  var plotW = W - padL - padR, plotH = H - padT - padB;
+  var band = plotW / 7, bw = Math.min(40, band * 0.5);
+  function yOf(v){ return padT + plotH - (v / max) * plotH; }
+
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="この7日間の1日あたりの杯数">';
+  [0, max/2, max].forEach(function(t){
+    s += '<line x1="'+padL+'" y1="'+yOf(t)+'" x2="'+(W - padR)+'" y2="'+yOf(t)+'" stroke="var(--line)" stroke-width="1"/>';
+    s += '<text class="axis-txt" x="'+(padL - 7)+'" y="'+(yOf(t) + 3.5)+'" text-anchor="end">'+t+'</text>';
+  });
+  days.forEach(function(day, i){
+    var cx = padL + band * i + band / 2;
+    var y = padT + plotH;
+    CAT_KEYS.forEach(function(c){
+      var n = day.counts[c]; if(!n) return;
+      var h = (n / max) * plotH;
+      y -= h;
+      s += '<rect x="'+(cx - bw/2)+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h, 1)+'" fill="'+CATS[c].color+'" opacity="0.88">' +
+           '<title>'+(day.d.getMonth()+1)+'月'+day.d.getDate()+'日 '+CATS[c].label+' '+n+'杯</title></rect>';
+    });
+    if(day.total > 0){
+      s += '<text class="axis-txt" x="'+cx+'" y="'+(y - 5)+'" text-anchor="middle" fill="var(--ink-2)">'+day.total+'</text>';
+    }
+    var isToday = (i === 6);
+    s += '<text class="day-txt'+(isToday ? " now" : "")+'" x="'+cx+'" y="'+(H - 15)+'" text-anchor="middle">'+
+         (isToday ? "今日" : WD[day.d.getDay()])+'</text>';
+    s += '<text class="axis-txt" x="'+cx+'" y="'+(H - 3)+'" text-anchor="middle">'+(day.d.getMonth()+1)+'/'+day.d.getDate()+'</text>';
+  });
+  s += '<line x1="'+padL+'" y1="'+(padT + plotH)+'" x2="'+(W - padR)+'" y2="'+(padT + plotH)+'" stroke="var(--line-strong)" stroke-width="1"/>';
+  s += '</svg>';
+  $("chartbox").innerHTML = s;
+}
+
+/* ================= 台帳 ================= */
+function buildFilters(){
+  function mk(k, label, color){
+    return '<button type="button" class="chip" data-f="'+k+'" style="--cat:'+(color || "var(--accent)")+'" aria-pressed="'+(filter === k)+'">'+
+      (color ? '<span class="dot" style="background:'+color+'"></span>' : '') + label + '</button>';
+  }
+  $("filterChips").innerHTML = mk("all", "すべて", null) +
+    CAT_KEYS.map(function(k){ return mk(k, CATS[k].label, CATS[k].color); }).join("");
+}
+function renderLedger(){
+  var list = view().filter(function(e){
+    if(filter !== "all" && e.cat !== filter) return false;
+    if(search && ((e.name || "") + " " + (e.memo || "")).toLowerCase().indexOf(search) === -1) return false;
+    return true;
+  });
+  $("ledgerCount").textContent = list.length + "件";
+
+  $("sampleBar").innerHTML = usingSample
+    ? '<div class="samplebar"><span><span class="badge-sample">サンプル</span> これは表示例です。最初の一杯を記すと入れ替わります。</span>' +
+      '<button class="iconbtn" id="clearSample">サンプルを消す</button></div>'
+    : "";
+
+  if(list.length === 0){
+    $("ledger").innerHTML = '<p class="empty">' +
+      ((search || filter !== "all") ? "この条件に合う記録はありません。" : "まだ一杯も記されていません。左のフォームから記録できます。") +
+      '</p>';
+    return;
+  }
+
+  var groups = [];
+  list.forEach(function(e){
+    var k = dayKey(new Date(e.ts));
+    var g = null;
+    for(var i = 0; i < groups.length; i++){ if(groups[i].k === k){ g = groups[i]; break; } }
+    if(!g){ g = {k:k, d:new Date(e.ts), items:[]}; groups.push(g); }
+    g.items.push(e);
+  });
+
+  $("ledger").innerHTML = groups.map(function(g){
+    var caf = g.items.reduce(function(s,e){ return s + (e.caf || 0); }, 0);
+    var alc = g.items.reduce(function(s,e){ return s + alcoholG(e); }, 0);
+    var sums = ['<span>'+g.items.length+'杯</span>'];
+    if(caf > 0) sums.push('<span>カフェイン '+Math.round(caf)+'mg</span>');
+    if(alc > 0) sums.push('<span>純アルコール '+round1(alc)+'g</span>');
+    return '<div class="daygroup">' +
+      '<div class="dayhead">' +
+        '<div class="daydate">'+(g.d.getMonth()+1)+'月'+g.d.getDate()+'日<span class="wd">'+WD[g.d.getDay()]+'曜</span></div>' +
+        '<div class="daysum">'+sums.join("")+'</div>' +
+      '</div>' +
+      g.items.map(entryRow).join("") +
+    '</div>';
+  }).join("");
+}
+function entryRow(e){
+  var d = new Date(e.ts);
+  var c = catOf(e.cat);
+  var metrics = ['<span>'+e.ml+' ml</span>'];
+  if(e.cat === "alcohol"){
+    if(e.abv) metrics.push('<span>'+e.abv+' %</span>');
+    metrics.push('<span>純アルコール '+round1(alcoholG(e))+' g</span>');
+  }else if(e.caf > 0){
+    metrics.push('<span>カフェイン '+e.caf+' mg</span>');
+  }
+  return '<div class="entry" style="--c:'+c.color+'">' +
+    '<div class="time">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>' +
+    '<div class="main">' +
+      '<div class="nm"><span class="swatch"></span><span class="title">'+esc(e.name)+'</span>' +
+        '<span class="catname">'+c.label+'</span>' +
+        (e.rating ? '<span class="rate">'+"★".repeat(e.rating)+'</span>' : '') +
+      '</div>' +
+      '<div class="metrics">'+metrics.join("")+'</div>' +
+      (e.memo ? '<div class="memo">'+esc(e.memo)+'</div>' : '') +
+    '</div>' +
+    '<div class="acts">' +
+      '<button type="button" class="iconbtn" data-again="'+e.id+'">もう一杯</button>' +
+      '<button type="button" class="iconbtn danger" data-del="'+e.id+'">削除</button>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ---------- 取り消し ---------- */
+function showUndo(entry){
+  if(!entry) return;
+  var old = document.querySelector(".toast"); if(old) old.remove();
+  if(undoTimer) clearTimeout(undoTimer);
+  var t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = '<span>「'+esc(entry.name)+'」を削除しました</span><button type="button">元に戻す</button>';
+  t.querySelector("button").addEventListener("click", function(){ t.remove(); addEntry(entry); });
+  document.body.appendChild(t);
+  undoTimer = setTimeout(function(){ t.remove(); }, 6000);
+}
+
+/* ================= 配線 ================= */
+function wire(){
+  $("presetChips").addEventListener("click", function(e){
+    var b = e.target.closest("[data-i]"); if(!b) return;
+    var p = PRESETS[draft.cat][Number(b.dataset.i)];
+    $("fName").value = p.name;
+    $("fMl").value = p.ml;
+    if(draft.cat === "alcohol"){ $("fAbv").value = p.abv; }
+    else { draft.cafRate = p.caf; $("fCaf").value = Math.round(p.ml * p.caf / 100); }
+    updateDerived();
+  });
+
+  $("mlQuick").addEventListener("click", function(e){
+    var b = e.target.closest("[data-ml]"); if(!b) return;
+    var ml = Number(b.dataset.ml);
+    $("fMl").value = ml;
+    if(draft.cat !== "alcohol") $("fCaf").value = Math.round(ml * draft.cafRate / 100);
+    updateDerived();
+  });
+  $("abvQuick").addEventListener("click", function(e){
+    var b = e.target.closest("[data-abv]"); if(!b) return;
+    $("fAbv").value = b.dataset.abv; updateDerived();
+  });
+  $("cafQuick").addEventListener("click", function(e){
+    var b = e.target.closest("[data-caf]"); if(!b) return;
+    $("fCaf").value = b.dataset.caf;
+    var ml = Number($("fMl").value) || 1;
+    draft.cafRate = Number(b.dataset.caf) / ml * 100;
+    updateDerived();
+  });
+
+  $("stars").addEventListener("click", function(e){
+    var s = e.target.closest(".star");
+    if(s){ draft.rating = Number(s.dataset.n); paintStars(); return; }
+    if(e.target.id === "starClear"){ draft.rating = 0; paintStars(); }
+  });
+
+  ["fMl","fAbv","fCaf"].forEach(function(id){
+    $(id).addEventListener("input", updateDerived);
+  });
+
+  $("form").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = $("fName").value.trim();
+    if(!name){ $("fName").focus(); return; }
+    var when = $("fWhen").value ? new Date($("fWhen").value) : new Date();
+    if(isNaN(when.getTime())) when = new Date();
+    var isAlc = draft.cat === "alcohol";
+    addEntry({
+      id: newId(),
+      ts: when.toISOString(),
+      cat: draft.cat,
+      name: name,
+      ml: Number($("fMl").value) || 0,
+      abv: isAlc ? (Number($("fAbv").value) || 0) : null,
+      caf: isAlc ? 0 : (Number($("fCaf").value) || 0),
+      rating: draft.rating,
+      memo: $("fMemo").value.trim()
+    });
+    $("fMemo").value = "";
+    draft.rating = 0; paintStars();
+    $("fWhen").value = toLocalInput(new Date());
+    $("formHint").textContent = "「" + name + "」を記しました";
+    setTimeout(function(){ $("formHint").textContent = "記録は自動で保存されます"; }, 2600);
+  });
+
+  $("filterChips").addEventListener("click", function(e){
+    var b = e.target.closest("[data-f]"); if(!b) return;
+    filter = b.dataset.f; buildFilters(); renderLedger();
+  });
+  $("searchBox").addEventListener("input", function(e){
+    search = e.target.value.trim().toLowerCase(); renderLedger();
+  });
+
+  $("sampleBar").addEventListener("click", function(e){
+    if(e.target.id === "clearSample"){ usingSample = false; renderAll(); }
+  });
+
+  $("ledger").addEventListener("click", function(e){
+    var again = e.target.closest("[data-again]");
+    if(again){
+      var src = null, all = view();
+      for(var i = 0; i < all.length; i++){ if(all[i].id === again.dataset.again){ src = all[i]; break; } }
+      if(!src) return;
+      var copy = Object.assign({}, src, {id:newId(), ts:new Date().toISOString(), memo:""});
+      addEntry(copy);
+      return;
+    }
+    var del = e.target.closest("[data-del]");
+    if(del){
+      var id = del.dataset.del;
+      if(id.indexOf("sample-") === 0){ usingSample = false; renderAll(); return; }
+      removeEntry(id);
+    }
+  });
+}
+
+/* ================= 起動 ================= */
+function renderAll(){
+  if(!usingSample && entries.length === 0) usingSample = true;
+  renderToday(); renderChart(); renderLedger();
+}
+function boot(){
+  var now = new Date();
+  $("mastDate").textContent = (now.getMonth()+1) + "/" + now.getDate() + " (" + WD[now.getDay()] + ")";
+  $("fWhen").value = toLocalInput(now);
+  buildCatChips(); buildQuick(); buildStars(); buildFilters(); wire();
+  setCat("coffee");
+  loadLocal(); sortEntries();
+  usingSample = entries.length === 0;
+  renderAll();
+  connect();
+}
+boot();
+</script>
