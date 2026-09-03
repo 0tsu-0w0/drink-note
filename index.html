@@ -1,7 +1,7 @@
-<title>一杯台帳</title>
+<title>Sip Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap">
 <style>
 :root{
   --ground:#E9EBE6; --surface:#F8F9F6; --surface-2:#F1F3EC;
@@ -54,8 +54,8 @@ input,textarea{font:inherit; color:inherit}
   max-width:1180px; margin:0 auto; padding:18px 24px 16px;
   display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
 }
-.wordmark{font-family:"Shippori Mincho B1",serif; font-weight:800; font-size:26px; letter-spacing:.14em; margin:0; line-height:1.2}
-.wordmark span{color:var(--accent)}
+.wordmark{font-family:"Fraunces","Shippori Mincho B1",Georgia,serif; font-weight:700; font-size:31px; letter-spacing:-.012em; margin:0; line-height:1.08}
+.wordmark span{color:var(--accent); font-weight:600}
 .tagline{color:var(--muted); font-size:12.5px; margin:2px 0 0; letter-spacing:.02em}
 .masthead-right{display:flex; align-items:center; gap:18px}
 .today-date{font-size:13px; color:var(--ink-2); line-height:1.4}
@@ -274,7 +274,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 <header class="masthead">
   <div class="masthead-in">
     <div>
-      <h1 class="wordmark">一杯<span>台帳</span></h1>
+      <h1 class="wordmark">Sip <span>Notes</span></h1>
       <p class="tagline">どこの誰が作った一杯を、どう味わったか。</p>
     </div>
     <div class="masthead-right">
@@ -341,7 +341,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
         <textarea id="fMemo" placeholder="冷めるにつれて紅茶のような余韻。"></textarea>
       </div>
 
-      <button type="submit" class="submit">台帳に記す</button>
+      <button type="submit" class="submit">書き留める</button>
       <p class="hint" id="formHint">記録は自動で保存されます</p>
     </form>
   </aside>
@@ -369,7 +369,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
     </div>
 
     <div class="panel">
-      <div class="panel-head"><h2 class="panel-title">台帳</h2><span class="eyebrow" id="ledgerCount"></span></div>
+      <div class="panel-head"><h2 class="panel-title">これまでの一杯</h2><span class="eyebrow" id="ledgerCount"></span></div>
       <div class="filters">
         <div class="chips" id="filterChips"></div>
         <div class="search"><input type="text" id="searchBox" placeholder="名前・産地・フレーバー" aria-label="名前・産地・フレーバーを検索"></div>
@@ -877,7 +877,7 @@ function connect(){
       var csv = "﻿" + rows.map(function(r){
         return r.map(function(c){ return '"' + String(c).replace(/"/g, '""') + '"'; }).join(",");
       }).join("\r\n");
-      dl.save({filename:"drink-log-" + dayKey(new Date()) + ".csv", data:csv}).catch(function(err){
+      dl.save({filename:"sip-notes-" + dayKey(new Date()) + ".csv", data:csv}).catch(function(err){
         if(err && err.code !== "declined") btn.textContent = "書き出せませんでした";
       });
     });
