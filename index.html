@@ -301,7 +301,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 
       <div class="field">
         <label for="fName">名前</label>
-        <input type="text" id="fName" placeholder="イルガチェフェ コンガ" required>
+        <input type="text" id="fName" required>
       </div>
 
       <div class="section-rule">素性</div>
@@ -338,7 +338,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 
       <div class="field">
         <label for="fMemo">メモ</label>
-        <textarea id="fMemo" placeholder="冷めるにつれて紅茶のような余韻。"></textarea>
+        <textarea id="fMemo"></textarea>
       </div>
 
       <button type="submit" class="submit">書き留める</button>
@@ -423,37 +423,37 @@ function beanColor(v){
 /* ---------- 素性の記載欄 ---------- */
 var ORIGIN = {
   coffee: [
-    {k:"origin",  label:"産地",   ph:"エチオピア イルガチェフェ", wide:true},
-    {k:"farm",    label:"農園",   ph:"コンガ ウォッシングステーション", wide:true},
-    {k:"maker",   label:"焙煎者", ph:"ロースター名"},
-    {k:"variety", label:"品種",   ph:"ハイブリッド・ゲイシャ"},
+    {k:"origin",  label:"産地", wide:true},
+    {k:"farm",    label:"農園", wide:true},
+    {k:"maker",   label:"焙煎者"},
+    {k:"variety", label:"品種"},
     {k:"grade",   label:"焙煎度", type:"choice", options:ROASTS.map(function(r){ return r.v; }), beans:true}
   ],
   tea: [
-    {k:"origin",  label:"産地", ph:"ダージリン", wide:true},
-    {k:"farm",    label:"茶園", ph:"キャッスルトン", wide:true},
-    {k:"maker",   label:"ブランド・製茶者", ph:"店名"},
-    {k:"variety", label:"品種", ph:"中国種・アッサム種"},
+    {k:"origin",  label:"産地", wide:true},
+    {k:"farm",    label:"茶園", wide:true},
+    {k:"maker",   label:"ブランド・製茶者"},
+    {k:"variety", label:"品種"},
     {k:"grade",   label:"摘み・グレード", type:"choice",
      options:["ファーストフラッシュ","セカンドフラッシュ","オータムナル","OP","BOP","CTC"]}
   ],
   green: [
-    {k:"origin",  label:"産地", ph:"八女・宇治・狭山", wide:true},
-    {k:"farm",    label:"茶園", ph:"茶園名", wide:true},
-    {k:"maker",   label:"茶舗", ph:"店名"},
-    {k:"variety", label:"品種", ph:"やぶきた・さえみどり"},
+    {k:"origin",  label:"産地", wide:true},
+    {k:"farm",    label:"茶園", wide:true},
+    {k:"maker",   label:"茶舗"},
+    {k:"variety", label:"品種"},
     {k:"grade",   label:"火入れ", type:"choice", options:["弱火入れ","中火入れ","強火入れ"]}
   ],
   alcohol: [
-    {k:"origin",  label:"産地",   ph:"ブルゴーニュ・新潟", wide:true},
-    {k:"farm",    label:"造り手", ph:"蔵元・醸造所・ドメーヌ", wide:true},
-    {k:"variety", label:"原料・品種", ph:"山田錦・ピノノワール"},
-    {k:"vintage", label:"年",     ph:"2021 / R5BY"},
-    {k:"abv",     label:"度数",   type:"num", unit:"%", ph:"15"}
+    {k:"origin",  label:"産地", wide:true},
+    {k:"farm",    label:"造り手", wide:true},
+    {k:"variety", label:"原料・品種"},
+    {k:"vintage", label:"年"},
+    {k:"abv",     label:"度数",   type:"num", unit:"%"}
   ],
   other: [
-    {k:"origin", label:"産地", ph:"産地・地域", wide:true},
-    {k:"maker",  label:"造り手・ブランド", ph:"メーカー名", wide:true}
+    {k:"origin", label:"産地", wide:true},
+    {k:"maker",  label:"造り手・ブランド", wide:true}
   ]
 };
 function originOf(k){ return ORIGIN[k] || ORIGIN.other; }
@@ -633,8 +633,8 @@ function buildOrigin(){
       return '<div class="field wide"><label>'+esc(f.label)+'</label><div class="chips" data-optgroup="'+esc(f.k)+'">'+chips+'</div></div>';
     }
     var input = f.type === "num"
-      ? '<div class="unit-input"><input type="number" min="0" max="96" step="0.5" data-org="'+esc(f.k)+'" placeholder="'+esc(f.ph || "")+'"><span class="unit">'+esc(f.unit || "")+'</span></div>'
-      : '<input type="text" data-org="'+esc(f.k)+'" placeholder="'+esc(f.ph || "")+'">';
+      ? '<div class="unit-input"><input type="number" min="0" max="96" step="0.5" data-org="'+esc(f.k)+'"><span class="unit">'+esc(f.unit || "")+'</span></div>'
+      : '<input type="text" data-org="'+esc(f.k)+'">';
     return '<div class="field'+(f.wide ? " wide" : "")+'"><label>'+esc(f.label)+'</label>'+input+'</div>';
   }).join("");
 }
