@@ -255,8 +255,6 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .iconbtn:hover{color:var(--ink); border-color:var(--line-strong)}
 .iconbtn.danger:hover{color:var(--over); border-color:var(--over)}
 
-.samplebar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:9px 16px; background:var(--accent-soft); border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink-2)}
-.badge-sample{font-size:10px; letter-spacing:.1em; border:1px solid var(--line-strong); padding:0 5px; border-radius:2px; color:var(--muted)}
 .empty{padding:40px 16px; text-align:center; color:var(--muted); font-size:13px}
 
 .toast{
@@ -374,7 +372,6 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
         <div class="chips" id="filterChips"></div>
         <div class="search"><input type="text" id="searchBox" placeholder="名前・産地・フレーバー" aria-label="名前・産地・フレーバーを検索"></div>
       </div>
-      <div id="sampleBar"></div>
       <div id="ledger"></div>
     </div>
   </section>
@@ -525,12 +522,10 @@ var LS_MIGRATED = "ichihai-daicho.migrated";
 var entries = [];
 var vocab = {coffee:[], tea:[], green:[], alcohol:[], other:[]};
 var store = null;
-var usingSample = false;
 var draft = {cat:"coffee", rating:0, notes:[], axes:{}, origin:{}};
 var filter = "all";
 var search = "";
 var undoTimer = null;
-var sampleCache = null;
 
 /* ---------- 小道具 ---------- */
 function $(id){ return document.getElementById(id); }
@@ -561,43 +556,7 @@ function axisText(item, v, max){
   return v + "/" + max;
 }
 
-/* ---------- 表示例 ---------- */
-function sampleEntries(){
-  if(sampleCache) return sampleCache;
-  var base = new Date();
-  function at(back, h, m){
-    var d = new Date(base); d.setDate(d.getDate()-back); d.setHours(h,m,0,0); return d.toISOString();
-  }
-  sampleCache = [
-    {id:"sample-1", ts:at(0,8,15), cat:"coffee", name:"イルガチェフェ コンガ", rating:5,
-     origin:{origin:"エチオピア イルガチェフェ", farm:"コンガ ウォッシングステーション", maker:"街のロースター", variety:"エチオピア在来種", grade:"ミディアム"},
-     notes:["ブルーベリー","ジャスミン","黒糖","紅茶のよう"],
-     axes:{clean:8,sweetness:7,acidity:8,mouthfeel:7,flavor:8,aftertaste:7,balance:7,overall:8},
-     memo:"冷めるにつれて紅茶のような余韻。"},
-    {id:"sample-2", ts:at(0,11,30), cat:"green", name:"煎茶", rating:4,
-     origin:{origin:"福岡 八女", maker:"茶舗", variety:"やぶきた", grade:"弱火入れ"},
-     notes:["覆い香","旨み","若芽"], axes:{aroma:4,umami:5,astring:2,finish:4,colour:3}, memo:""},
-    {id:"sample-3", ts:at(0,15,0), cat:"tea", name:"ダージリン セカンドフラッシュ", rating:4,
-     origin:{origin:"インド ダージリン", farm:"キャッスルトン", grade:"セカンドフラッシュ"},
-     notes:["マスカット","花香","ブリスク（爽快）"], axes:{aroma:5,body:3,astring:3,finish:4,colour:2}, memo:""},
-    {id:"sample-4", ts:at(1,9,10), cat:"coffee", name:"アンティグア", rating:4,
-     origin:{origin:"グアテマラ アンティグア", farm:"ラ・ソレダー", maker:"街のロースター", grade:"フルシティ"},
-     notes:["チョコレート","アーモンド","オレンジ"],
-     axes:{clean:7,sweetness:7,acidity:6,mouthfeel:7,flavor:7,aftertaste:6,balance:7,overall:7}, memo:"ミルクに負けない。"},
-    {id:"sample-5", ts:at(1,19,40), cat:"alcohol", name:"ペールエール", rating:4,
-     origin:{origin:"長野", farm:"ブルワリー", variety:"カスケード", abv:"5.5"},
-     notes:["ホップ","柑橘","麦芽"], axes:{aroma:4,sweetdry:2,bodyaxis:3,acidity:2,bitter:4,finish:3}, memo:"仕事あがりの一杯。"},
-    {id:"sample-6", ts:at(2,20,15), cat:"alcohol", name:"純米吟醸", rating:5,
-     origin:{origin:"新潟", farm:"○○酒造", variety:"五百万石", vintage:"R5BY", abv:"15"},
-     notes:["メロン","米の旨み","キレ"], axes:{aroma:4,sweetdry:2,bodyaxis:4,acidity:3,bitter:1,finish:4}, memo:"冷やで。"},
-    {id:"sample-7", ts:at(3,7,50), cat:"coffee", name:"ニエリ", rating:5,
-     origin:{origin:"ケニア ニエリ", farm:"カリンドゥンドゥ", maker:"街のロースター", grade:"シティ"},
-     notes:["ブラックカラント","柑橘","黒糖"],
-     axes:{clean:8,sweetness:8,acidity:8,mouthfeel:7,flavor:8,aftertaste:8,balance:8,overall:8}, memo:"エスプレッソで。"}
-  ];
-  return sampleCache;
-}
-function view(){ return usingSample ? sampleEntries() : entries; }
+function view(){ return entries; }
 
 /* ================= フォーム ================= */
 function buildCatChips(){
@@ -794,7 +753,6 @@ function saveLocal(){
 function sortEntries(){ entries.sort(function(a,b){ return b.ts.localeCompare(a.ts); }); }
 
 function addEntry(entry){
-  usingSample = false;
   entries = entries.filter(function(e){ return e.id !== entry.id; });
   entries.push(entry);
   sortEntries(); saveLocal(); renderAll();
@@ -837,7 +795,6 @@ function connect(){
       }
       try{ localStorage.setItem(LS_MIGRATED, "1"); }catch(err){}
       entries = remote; sortEntries(); saveLocal();
-      if(entries.length > 0) usingSample = false;
       renderAll();
     }, function(err){
       store = null;
@@ -1047,11 +1004,6 @@ function renderLedger(){
   });
   $("ledgerCount").textContent = list.length + "件";
 
-  $("sampleBar").innerHTML = usingSample
-    ? '<div class="samplebar"><span><span class="badge-sample">サンプル</span> これは表示例です。最初の一杯を記すと入れ替わります。</span>' +
-      '<button class="iconbtn" id="clearSample">サンプルを消す</button></div>'
-    : "";
-
   if(list.length === 0){
     $("ledger").innerHTML = '<p class="empty">' +
       ((search || filter !== "all") ? "この条件に合う記録はありません。" : "まだ一杯も記されていません。左のフォームから記録できます。") + '</p>';
@@ -1231,10 +1183,6 @@ function wire(){
   $("searchBox").addEventListener("input", function(e){
     search = e.target.value.trim().toLowerCase(); renderLedger();
   });
-  $("sampleBar").addEventListener("click", function(e){
-    if(e.target.id === "clearSample"){ usingSample = false; renderAll(); }
-  });
-
   $("ledger").addEventListener("click", function(e){
     var again = e.target.closest("[data-again]");
     if(again){
@@ -1250,7 +1198,6 @@ function wire(){
     var del = e.target.closest("[data-del]");
     if(del){
       var id = del.dataset.del;
-      if(id.indexOf("sample-") === 0){ usingSample = false; renderAll(); return; }
       removeEntry(id);
     }
   });
@@ -1258,7 +1205,6 @@ function wire(){
 
 /* ================= 起動 ================= */
 function renderAll(){
-  if(!usingSample && entries.length === 0) usingSample = true;
   renderStrip(); renderChart(); renderScoreChart(); renderFlavRank(); renderLedger();
 }
 function boot(){
@@ -1269,7 +1215,6 @@ function boot(){
   buildCatChips(); buildStars(); buildFilters(); wire();
   setCat("coffee");
   loadLocal(); sortEntries();
-  usingSample = entries.length === 0;
   renderAll();
   connect();
 }
