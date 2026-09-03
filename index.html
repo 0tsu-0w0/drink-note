@@ -43,27 +43,18 @@ body{
   font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased;
 }
 .num{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,monospace; font-variant-numeric:tabular-nums}
-.eyebrow{
-  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--muted); font-weight:500;
-}
+.eyebrow{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:500}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
 button{font:inherit; color:inherit; cursor:pointer}
-input,select,textarea{font:inherit; color:inherit}
+input,textarea{font:inherit; color:inherit}
 
 /* ---------- masthead ---------- */
-.masthead{
-  border-bottom:1px solid var(--line-strong);
-  background:var(--surface);
-}
+.masthead{border-bottom:1px solid var(--line-strong); background:var(--surface)}
 .masthead-in{
-  max-width:1140px; margin:0 auto; padding:18px 24px 16px;
-  display:flex; align-items:baseline; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  max-width:1180px; margin:0 auto; padding:18px 24px 16px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
 }
-.wordmark{
-  font-family:"Shippori Mincho B1",serif; font-weight:800;
-  font-size:26px; letter-spacing:.14em; margin:0; line-height:1.2;
-}
+.wordmark{font-family:"Shippori Mincho B1",serif; font-weight:800; font-size:26px; letter-spacing:.14em; margin:0; line-height:1.2}
 .wordmark span{color:var(--accent)}
 .tagline{color:var(--muted); font-size:12.5px; margin:2px 0 0; letter-spacing:.02em}
 .masthead-right{display:flex; align-items:center; gap:18px}
@@ -71,13 +62,10 @@ input,select,textarea{font:inherit; color:inherit}
 .today-date b{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px; font-weight:500}
 
 /* ---------- layout ---------- */
-.wrap{max-width:1140px; margin:0 auto; padding:24px; display:grid; grid-template-columns:352px minmax(0,1fr); gap:28px; align-items:start}
-@media (max-width:900px){ .wrap{grid-template-columns:1fr; padding:18px; gap:22px} }
+.wrap{max-width:1180px; margin:0 auto; padding:24px; display:grid; grid-template-columns:378px minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:940px){ .wrap{grid-template-columns:1fr; padding:18px; gap:22px} }
 
-.panel{
-  background:var(--surface); border:1px solid var(--line);
-  border-radius:4px; box-shadow:var(--shadow);
-}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow)}
 .panel-head{
   padding:13px 16px 11px; border-bottom:1px solid var(--line);
   display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -87,7 +75,13 @@ input,select,textarea{font:inherit; color:inherit}
 /* ---------- composer ---------- */
 .composer-body{padding:16px; display:flex; flex-direction:column; gap:15px}
 .field{display:flex; flex-direction:column; gap:6px; min-width:0}
-.field > label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.field > label,.flabel{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.section-rule{
+  display:flex; align-items:center; gap:10px; margin-top:3px;
+  font-family:"Shippori Mincho B1",serif; font-size:13.5px; letter-spacing:.1em; color:var(--ink-2);
+}
+.section-rule::after{content:""; flex:1; height:1px; background:var(--line-strong)}
+
 .chips{display:flex; flex-wrap:wrap; gap:6px}
 .chip{
   border:1px solid var(--line-strong); background:transparent; color:var(--ink-2);
@@ -111,10 +105,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 
 .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
 .unit-input{position:relative}
-.unit-input .unit{
-  position:absolute; right:10px; top:50%; transform:translateY(-50%);
-  font-size:11.5px; color:var(--muted); pointer-events:none;
-}
+.unit-input .unit{position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:11.5px; color:var(--muted); pointer-events:none}
 .unit-input input{padding-right:34px}
 .quick{display:flex; gap:5px; margin-top:2px; flex-wrap:wrap}
 .quick button{
@@ -125,34 +116,73 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .quick button:hover{color:var(--ink); border-color:var(--line-strong)}
 
 .stars{display:flex; gap:2px; align-items:center}
-.star{
-  background:none; border:0; padding:1px 2px; font-size:19px; line-height:1;
-  color:var(--line-strong); transition:color .1s;
-}
+.star{background:none; border:0; padding:1px 2px; font-size:19px; line-height:1; color:var(--line-strong); transition:color .1s}
 .star.on{color:var(--warn)}
 .star:hover{color:var(--warn)}
 .star-clear{background:none; border:0; font-size:11.5px; color:var(--muted); margin-left:6px; padding:2px 4px}
 .star-clear:hover{color:var(--ink)}
 
-.derived{
-  display:flex; gap:14px; flex-wrap:wrap; padding:9px 11px;
-  background:var(--surface-2); border-left:2px solid var(--cat);
-  font-size:12px; color:var(--muted);
+/* ---------- flavour notes ---------- */
+.notepicked{display:flex; flex-wrap:wrap; gap:5px; min-height:0}
+.notepicked:empty{display:none}
+.ntag{
+  display:inline-flex; align-items:center; gap:5px; font-size:12px; padding:3px 6px 3px 9px;
+  background:var(--cat); color:var(--accent-ink); border-radius:2px;
 }
-.derived b{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-weight:500; color:var(--ink); font-size:13px}
+.ntag b{font-weight:500}
+.ntag button{background:none; border:0; padding:0 1px; color:inherit; opacity:.7; font-size:13px; line-height:1}
+.ntag button:hover{opacity:1}
+.notebox{
+  max-height:186px; overflow-y:auto; border:1px solid var(--line);
+  background:var(--surface-2); padding:9px 10px; display:flex; flex-direction:column; gap:9px;
+}
+.ngroup{display:flex; flex-direction:column; gap:5px}
+.ngroup .gname{font-size:10.5px; letter-spacing:.1em; color:var(--muted)}
+.ngroup .chips{gap:4px}
+.nchip{
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
+  padding:2px 8px; border-radius:2px; font-size:11.5px; line-height:1.5;
+}
+.nchip:hover{border-color:var(--cat); color:var(--ink)}
+.nchip[aria-pressed="true"]{background:var(--cat); border-color:var(--cat); color:var(--accent-ink)}
+.noteadd input{padding:5px 9px; font-size:12px}
+
+/* ---------- evaluation axes ---------- */
+.axes{display:flex; flex-direction:column; gap:7px}
+.axis{display:grid; grid-template-columns:96px 1fr; gap:8px; align-items:center}
+.axis .axname{font-size:11.5px; color:var(--ink-2); line-height:1.35}
+.seg{display:flex; gap:3px}
+.seg button{
+  flex:1; min-width:0; background:var(--surface-2); border:1px solid var(--line);
+  border-radius:2px; padding:2px 0; font-size:11px; color:var(--muted);
+  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums;
+}
+.seg button:hover{border-color:var(--cat); color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--cat); border-color:var(--cat); color:var(--accent-ink); font-weight:500}
+.poles{
+  grid-column:2; display:flex; justify-content:space-between;
+  font-size:10.5px; color:var(--muted); margin-top:-4px;
+}
+.axis-foot{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  padding:8px 11px; background:var(--surface-2); border-left:2px solid var(--cat); font-size:12px; color:var(--muted);
+}
+.axis-foot .total{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:17px; color:var(--ink); font-weight:500}
+.axis-foot .verdict{font-size:11.5px; color:var(--accent); font-weight:700; letter-spacing:.06em}
+.axis-foot .verdict.no{color:var(--muted); font-weight:400}
+.linkbtn{background:none; border:0; padding:0; font-size:11.5px; color:var(--accent); text-decoration:underline; text-underline-offset:2px}
 
 .submit{
   background:var(--accent); color:var(--accent-ink); border:0; border-radius:2px;
-  padding:11px 14px; font-weight:700; letter-spacing:.1em; font-size:13.5px;
-  transition:filter .12s;
+  padding:11px 14px; font-weight:700; letter-spacing:.1em; font-size:13.5px; transition:filter .12s;
 }
 .submit:hover{filter:brightness(1.08)}
 .hint{font-size:11.5px; color:var(--muted); margin:0; text-align:center}
 
-/* ---------- meters ---------- */
-.today{display:grid; grid-template-columns:auto auto minmax(0,1fr); gap:22px; padding:16px; align-items:start}
-@media (max-width:620px){ .today{grid-template-columns:1fr 1fr; gap:16px} .today .totals{grid-column:1/-1} }
-.meter{display:flex; flex-direction:column; align-items:center; gap:5px; width:132px}
+/* ---------- today ---------- */
+.today{display:grid; grid-template-columns:auto minmax(0,1fr); gap:22px; padding:16px; align-items:start}
+@media (max-width:560px){ .today{grid-template-columns:1fr} }
+.meter{display:flex; flex-direction:column; align-items:center; gap:5px; width:142px}
 .meter svg{display:block; width:80px; height:96px}
 .meter-label{font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase}
 .meter-val{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px; font-weight:500}
@@ -160,7 +190,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .meter-note{font-size:11px; color:var(--muted); text-align:center; line-height:1.5}
 .meter-note.over{color:var(--over); font-weight:500}
 .totals{border-left:1px solid var(--line); padding-left:22px; display:flex; flex-direction:column; gap:9px}
-@media (max-width:620px){ .totals{border-left:0; border-top:1px solid var(--line); padding:14px 0 0} }
+@media (max-width:560px){ .totals{border-left:0; border-top:1px solid var(--line); padding:14px 0 0} }
 .tline{display:flex; align-items:center; gap:10px; justify-content:space-between}
 .tline .k{font-size:12.5px; color:var(--muted); flex:none}
 .tline .v{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:14px; flex:none}
@@ -168,18 +198,27 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .tline .bar{flex:1; height:3px; background:var(--line); position:relative; min-width:40px}
 .tline .bar i{position:absolute; inset:0 auto 0 0; background:var(--c)}
 
-/* ---------- week chart ---------- */
+/* ---------- charts ---------- */
 .chartbox{padding:8px 16px 12px; overflow-x:auto}
 .chartbox svg{display:block; width:100%; min-width:420px; height:auto}
 .axis-txt{font-family:"Roboto Mono",monospace; font-size:10px; fill:var(--muted)}
 .day-txt{font-size:11px; fill:var(--muted); font-family:"Zen Kaku Gothic New",sans-serif}
 .day-txt.now{fill:var(--ink); font-weight:700}
+.taste{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:0}
+@media (max-width:760px){ .taste{grid-template-columns:1fr} }
+.taste > div{padding:12px 16px 14px}
+.taste > div + div{border-left:1px solid var(--line)}
+@media (max-width:760px){ .taste > div + div{border-left:0; border-top:1px solid var(--line)} }
+.subhead{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 8px}
+.rank{display:flex; flex-direction:column; gap:6px}
+.rankrow{display:grid; grid-template-columns:minmax(72px,auto) 1fr auto; gap:9px; align-items:center; font-size:12.5px}
+.rankrow .rbar{height:9px; background:var(--line); position:relative}
+.rankrow .rbar i{position:absolute; inset:0 auto 0 0; background:var(--c); opacity:.85}
+.rankrow .rn{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:11.5px; color:var(--muted)}
+.nodata{font-size:12px; color:var(--muted); padding:14px 0; line-height:1.7}
 
 /* ---------- filters ---------- */
-.filters{
-  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-  padding:12px 16px; border-bottom:1px solid var(--line);
-}
+.filters{display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:12px 16px; border-bottom:1px solid var(--line)}
 .filters .chips{flex:1}
 .search{max-width:190px; flex:none}
 .search input{padding:6px 10px; font-size:12.5px}
@@ -189,75 +228,64 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .daygroup:last-child{border-bottom:0}
 .dayhead{
   display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;
-  padding:11px 16px 8px; background:var(--surface-2);
-  border-bottom:1px solid var(--line);
+  padding:11px 16px 8px; background:var(--surface-2); border-bottom:1px solid var(--line);
 }
 .daydate{font-family:"Shippori Mincho B1",serif; font-size:15px; font-weight:600; letter-spacing:.05em}
 .daydate .wd{font-size:12px; color:var(--muted); margin-left:5px; font-family:"Zen Kaku Gothic New",sans-serif; letter-spacing:0}
 .daysum{font-size:11.5px; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums}
 
-.entry{
-  display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:0 12px;
-  padding:10px 16px; align-items:start; border-bottom:1px dotted var(--line);
-}
+.entry{display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:0 12px; padding:10px 16px; align-items:start; border-bottom:1px dotted var(--line)}
 .entry:last-child{border-bottom:0}
 .entry:hover{background:var(--glass)}
-.entry .time{
-  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums;
-  font-size:12.5px; color:var(--muted); padding-top:2px;
-}
+.entry .time{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--muted); padding-top:2px}
 .entry .main{min-width:0}
 .entry .nm{display:flex; align-items:center; gap:7px; flex-wrap:wrap}
 .entry .swatch{width:9px; height:9px; border-radius:50%; background:var(--c); flex:none}
 .entry .title{font-weight:500; font-size:14.5px}
 .entry .catname{font-size:11px; color:var(--c); letter-spacing:.06em}
 .entry .rate{color:var(--warn); font-size:12px; letter-spacing:1px}
-.entry .metrics{
-  display:flex; gap:11px; flex-wrap:wrap; font-size:11.5px; color:var(--muted);
-  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; margin-top:1px;
+.scorebadge{
+  font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums;
+  font-size:11.5px; border:1px solid var(--c); color:var(--c); padding:0 6px; border-radius:2px; font-weight:500;
 }
+.scorebadge.spec{background:var(--c); color:var(--accent-ink); border-color:var(--c)}
+.entry .metrics{display:flex; gap:11px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums; margin-top:1px}
+.entry .flav{display:flex; flex-wrap:wrap; gap:4px; margin-top:4px}
+.entry .flav span{font-size:11px; border:1px solid var(--line-strong); border-radius:2px; padding:0 6px; color:var(--ink-2)}
+.entry .axline{font-size:11.5px; color:var(--muted); margin-top:3px; display:flex; flex-wrap:wrap; gap:10px}
+.entry .axline b{font-weight:400; color:var(--ink-2); font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums}
 .entry .memo{font-size:12.5px; color:var(--ink-2); margin-top:3px; overflow-wrap:anywhere}
 .entry .acts{display:flex; gap:4px; opacity:0; transition:opacity .12s}
 .entry:hover .acts,.entry:focus-within .acts{opacity:1}
 @media (hover:none){ .entry .acts{opacity:1} }
-.iconbtn{
-  background:transparent; border:1px solid var(--line); border-radius:2px;
-  font-size:11.5px; padding:3px 8px; color:var(--muted); white-space:nowrap;
-}
+.iconbtn{background:transparent; border:1px solid var(--line); border-radius:2px; font-size:11.5px; padding:3px 8px; color:var(--muted); white-space:nowrap}
 .iconbtn:hover{color:var(--ink); border-color:var(--line-strong)}
 .iconbtn.danger:hover{color:var(--over); border-color:var(--over)}
 
 .samplebar{
   display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-  padding:9px 16px; background:var(--accent-soft); border-bottom:1px solid var(--line);
-  font-size:12.5px; color:var(--ink-2);
+  padding:9px 16px; background:var(--accent-soft); border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink-2);
 }
-.badge-sample{
-  font-size:10px; letter-spacing:.1em; border:1px solid var(--line-strong);
-  padding:0 5px; border-radius:2px; color:var(--muted);
-}
+.badge-sample{font-size:10px; letter-spacing:.1em; border:1px solid var(--line-strong); padding:0 5px; border-radius:2px; color:var(--muted)}
 .empty{padding:40px 16px; text-align:center; color:var(--muted); font-size:13px}
 
 .toast{
   position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
   background:var(--ink); color:var(--ground); padding:9px 14px; border-radius:3px;
-  display:flex; align-items:center; gap:14px; font-size:13px; box-shadow:0 6px 20px rgba(0,0,0,.25);
-  z-index:20; max-width:90vw;
+  display:flex; align-items:center; gap:14px; font-size:13px; box-shadow:0 6px 20px rgba(0,0,0,.25); z-index:20; max-width:90vw;
 }
 .toast button{background:none; border:0; color:var(--accent); font-weight:700; padding:0; white-space:nowrap}
-.foot{
-  max-width:1140px; margin:0 auto; padding:4px 24px 34px;
-  font-size:11.5px; color:var(--muted); line-height:1.9; max-width:min(1140px,72ch);
-}
+.foot{margin:0 auto; padding:4px 24px 34px; font-size:11.5px; color:var(--muted); line-height:1.9; max-width:min(1180px,74ch)}
 .foot b{font-weight:500; color:var(--ink-2)}
-@media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
+.foot p{margin:0 0 8px}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important} }
 </style>
 
 <header class="masthead">
   <div class="masthead-in">
     <div>
       <h1 class="wordmark">一杯<span>台帳</span></h1>
-      <p class="tagline">珈琲も紅茶もお酒も、一杯ずつ書き留めておく。</p>
+      <p class="tagline">珈琲も紅茶もお酒も、味と香りごと書き留めておく。</p>
     </div>
     <div class="masthead-right">
       <div class="today-date"><span class="eyebrow">本日</span><br><b id="mastDate">—</b></div>
@@ -283,7 +311,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 
       <div class="field">
         <label for="fName">名前</label>
-        <input type="text" id="fName" placeholder="ドリップコーヒー" required>
+        <input type="text" id="fName" placeholder="エチオピア イルガチェフェ" required>
       </div>
 
       <div class="row2">
@@ -297,14 +325,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
           <div class="unit-input"><input type="number" id="fAbv" min="0" max="96" step="0.5" value="5"><span class="unit">%</span></div>
           <div class="quick" id="abvQuick"></div>
         </div>
-        <div class="field" id="cafField">
-          <label for="fCaf">カフェイン</label>
-          <div class="unit-input"><input type="number" id="fCaf" min="0" max="1000" step="5" value="90"><span class="unit">mg</span></div>
-          <div class="quick" id="cafQuick"><button type="button" data-caf="0">0</button><button type="button" data-caf="60">60</button><button type="button" data-caf="90">90</button><button type="button" data-caf="140">140</button></div>
-        </div>
       </div>
-
-      <div class="derived" id="derived"></div>
 
       <div class="row2">
         <div class="field">
@@ -312,14 +333,29 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
           <input type="datetime-local" id="fWhen">
         </div>
         <div class="field">
-          <label>評価</label>
+          <label>好み</label>
           <div class="stars" id="stars"></div>
         </div>
       </div>
 
+      <div class="section-rule">味と香り</div>
+
+      <div class="field">
+        <label>フレーバーノート</label>
+        <div class="notepicked" id="notePicked"></div>
+        <div class="notebox" id="noteBox"></div>
+        <div class="noteadd"><input type="text" id="noteAdd" placeholder="ここにない言葉を書いて Enter"></div>
+      </div>
+
+      <div class="field">
+        <label id="axesLabel">評価軸</label>
+        <div class="axes" id="axes"></div>
+        <div class="axis-foot" id="axisFoot"></div>
+      </div>
+
       <div class="field">
         <label for="fMemo">メモ</label>
-        <textarea id="fMemo" placeholder="豆はエチオピア。浅煎りで柑橘の酸。"></textarea>
+        <textarea id="fMemo" placeholder="浅煎り。冷めるにつれて紅茶のような余韻。"></textarea>
       </div>
 
       <button type="submit" class="submit">台帳に記す</button>
@@ -330,7 +366,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
   <!-- ============ 台帳本体 ============ -->
   <section style="display:flex; flex-direction:column; gap:22px; min-width:0">
     <div class="panel">
-      <div class="panel-head"><h2 class="panel-title">今日のグラス</h2><span class="eyebrow" id="todayCount">0杯</span></div>
+      <div class="panel-head"><h2 class="panel-title">今日の一杯</h2><span class="eyebrow" id="todayCount">0杯</span></div>
       <div class="today" id="today"></div>
     </div>
 
@@ -340,10 +376,24 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
     </div>
 
     <div class="panel">
+      <div class="panel-head"><h2 class="panel-title">味の記録</h2><span class="eyebrow">カッピングスコアとフレーバー</span></div>
+      <div class="taste">
+        <div>
+          <p class="subhead">珈琲のカッピングスコア（SCAJ 100点法）</p>
+          <div id="scoreChart"></div>
+        </div>
+        <div>
+          <p class="subhead">よく記したフレーバー</p>
+          <div id="flavRank"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
       <div class="panel-head"><h2 class="panel-title">台帳</h2><span class="eyebrow" id="ledgerCount"></span></div>
       <div class="filters">
         <div class="chips" id="filterChips"></div>
-        <div class="search"><input type="text" id="searchBox" placeholder="名前・メモを検索" aria-label="名前・メモを検索"></div>
+        <div class="search"><input type="text" id="searchBox" placeholder="名前・フレーバー・メモ" aria-label="名前・フレーバー・メモを検索"></div>
       </div>
       <div id="sampleBar"></div>
       <div id="ledger"></div>
@@ -351,11 +401,11 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
   </section>
 </div>
 
-<p class="foot">
-  目安の出典 ── カフェインは健康な成人で <b>1日400mg・1回200mg</b> まで（EFSA, 2015）。
-  純アルコールは <b>1日20g</b> が「節度ある適度な飲酒」で、生活習慣病のリスクが高まる量は男性40g・女性20g以上（厚生労働省 健康日本21／飲酒ガイドライン）。
-  純アルコール量(g) = 量(ml) × 度数(%) ÷ 100 × 0.8。プリセットのカフェイン量は一般的な浸出値からの概算で、実際の値は豆・茶葉・淹れ方で大きく変わります。目安であり、医学的な助言ではありません。
-</p>
+<div class="foot">
+  <p>珈琲の評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。基礎点36点に、8項目（カップのきれいさ／甘さ／酸の質／口に含んだ質感／風味／後味の印象度／バランス／総合評価）を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安。実際のカッピングは0.5点刻みで採点しますが、ここでは1点刻みにしています。</p>
+  <p>フレーバーの語彙は <b>SCA / World Coffee Research のコーヒーフレーバーホイール</b>の分類を、日本茶の「覆い香」「火香」などは日本茶の審査用語を参考にしました。お酒の甘辛・淡麗濃醇は日本酒の味わいの捉え方に倣った双極の軸です。</p>
+  <p>純アルコール量(g) = 量(ml) × 度数(%) ÷ 100 × 0.8。<b>1日20g</b>が「節度ある適度な飲酒」で、生活習慣病のリスクが高まる量は男性40g・女性20g以上（厚生労働省 健康日本21／飲酒ガイドライン）。目安であり、医学的な助言ではありません。</p>
+</div>
 
 <script>
 "use strict";
@@ -370,49 +420,110 @@ var CATS = {
 };
 var CAT_KEYS = ["coffee","tea","green","alcohol","other"];
 
-/* 定番。caf は 100ml あたりの mg、abv は度数(%) */
 var PRESETS = {
   coffee : [
-    {name:"ドリップコーヒー", ml:150, caf:60},
-    {name:"エスプレッソ",     ml:30,  caf:212},
-    {name:"カフェラテ",       ml:200, caf:40},
-    {name:"インスタント",     ml:150, caf:57},
-    {name:"カフェインレス",   ml:150, caf:2}
+    {name:"ドリップコーヒー", ml:150}, {name:"エスプレッソ", ml:30},
+    {name:"カフェラテ", ml:200}, {name:"フレンチプレス", ml:180}, {name:"水出し", ml:200}
   ],
   tea : [
-    {name:"紅茶",         ml:150, caf:30},
-    {name:"ミルクティー", ml:200, caf:22},
-    {name:"アールグレイ", ml:150, caf:30},
-    {name:"チャイ",       ml:200, caf:25}
+    {name:"ダージリン", ml:150}, {name:"アッサム", ml:150},
+    {name:"ミルクティー", ml:200}, {name:"アールグレイ", ml:150}, {name:"チャイ", ml:200}
   ],
   green : [
-    {name:"煎茶",     ml:150, caf:20},
-    {name:"玉露",     ml:60,  caf:160},
-    {name:"ほうじ茶", ml:150, caf:20},
-    {name:"抹茶",     ml:70,  caf:64},
-    {name:"麦茶",     ml:200, caf:0}
+    {name:"煎茶", ml:150}, {name:"玉露", ml:60}, {name:"ほうじ茶", ml:150},
+    {name:"抹茶", ml:70}, {name:"番茶", ml:200}
   ],
   alcohol : [
-    {name:"ビール",         ml:350, abv:5},
-    {name:"ハイボール",     ml:350, abv:7},
-    {name:"日本酒（一合）", ml:180, abv:15},
-    {name:"ワイン",         ml:120, abv:12},
-    {name:"レモンサワー",   ml:350, abv:5},
-    {name:"ウイスキー",     ml:30,  abv:40},
-    {name:"焼酎の水割り",   ml:200, abv:10}
+    {name:"ビール", ml:350, abv:5}, {name:"ハイボール", ml:350, abv:7},
+    {name:"日本酒（一合）", ml:180, abv:15}, {name:"赤ワイン", ml:120, abv:13},
+    {name:"白ワイン", ml:120, abv:12}, {name:"レモンサワー", ml:350, abv:5},
+    {name:"ウイスキー", ml:30, abv:40}, {name:"焼酎の水割り", ml:200, abv:10}
   ],
   other : [
-    {name:"水",               ml:200, caf:0},
-    {name:"炭酸水",           ml:350, caf:0},
-    {name:"オレンジジュース", ml:200, caf:0},
-    {name:"コーラ",           ml:350, caf:10},
-    {name:"エナジードリンク", ml:250, caf:32}
+    {name:"水", ml:200}, {name:"炭酸水", ml:350}, {name:"オレンジジュース", ml:200},
+    {name:"コーラ", ml:350}, {name:"甘酒", ml:180}
   ]
 };
 var ML_QUICK  = [30, 100, 150, 200, 350, 500];
 var ABV_QUICK = [5, 7, 12, 15, 40];
-var CAF_LIMIT = 400;   /* mg / 日 */
-var ALC_LIMIT = 20;    /* g / 日 */
+var ALC_LIMIT = 20;   /* g / 日 */
+var SCAJ_BASE = 36;
+var SPECIALTY = 80;
+
+/* ---------- 評価軸 ---------- */
+var AXES = {
+  coffee: {max:8, scaj:true, items:[
+    {k:"clean",      label:"カップのきれいさ"},
+    {k:"sweetness",  label:"甘さ"},
+    {k:"acidity",    label:"酸の質"},
+    {k:"mouthfeel",  label:"口に含んだ質感"},
+    {k:"flavor",     label:"風味"},
+    {k:"aftertaste", label:"後味の印象度"},
+    {k:"balance",    label:"バランス"},
+    {k:"overall",    label:"総合評価"}
+  ]},
+  tea: {max:5, items:[
+    {k:"aroma",   label:"香り"},
+    {k:"body",    label:"コク"},
+    {k:"astring", label:"渋み"},
+    {k:"finish",  label:"余韻"},
+    {k:"colour",  label:"水色", poles:["淡い","濃い"]}
+  ]},
+  green: {max:5, items:[
+    {k:"aroma",   label:"香り"},
+    {k:"umami",   label:"旨み"},
+    {k:"astring", label:"渋み"},
+    {k:"finish",  label:"余韻"},
+    {k:"colour",  label:"水色", poles:["淡い","濃い"]}
+  ]},
+  alcohol: {max:5, items:[
+    {k:"aroma",    label:"香りの強さ"},
+    {k:"sweetdry", label:"甘辛", poles:["辛口","甘口"]},
+    {k:"bodyaxis", label:"ボディ", poles:["淡麗","濃醇"]},
+    {k:"acidity",  label:"酸味"},
+    {k:"bitter",   label:"苦味・渋み"},
+    {k:"finish",   label:"余韻の長さ"}
+  ]},
+  other: {max:5, items:[
+    {k:"aroma",   label:"香り"},
+    {k:"sweet",   label:"甘さ"},
+    {k:"acidity", label:"酸味"},
+    {k:"finish",  label:"後味"}
+  ]}
+};
+var POLE_WORDS = ["", "とても", "やや", "中庸", "やや", "とても"];
+
+/* ---------- フレーバーの語彙 ---------- */
+var FLAVORS = {
+  coffee: [
+    {g:"フルーティ",     items:["ベリー","ブルーベリー","ストロベリー","柑橘","レモン","オレンジ","りんご","桃","ぶどう","トロピカル","レーズン","プルーン"]},
+    {g:"フローラル",     items:["花","ジャスミン","ローズ","カモミール","紅茶のよう"]},
+    {g:"甘い",           items:["黒糖","キャラメル","蜂蜜","バニラ","メープル"]},
+    {g:"ナッツ・ココア", items:["アーモンド","ヘーゼルナッツ","ピーナッツ","チョコレート","ダークチョコ","ココア"]},
+    {g:"スパイス",       items:["シナモン","クローブ","ナツメグ","胡椒"]},
+    {g:"ロースト",       items:["焙煎香","香ばしい","スモーキー","焦げ","タバコ"]},
+    {g:"青み・植物",     items:["青草","ハーブ","豆っぽい","未熟"]},
+    {g:"発酵・その他",   items:["ワイニー","発酵","土っぽい","紙っぽい","カビ臭"]}
+  ],
+  tea: [
+    {g:"香り",   items:["花香","果香","蜜香","マスカット","モルティ","スモーキー","スパイシー","ウッディ","干し草"]},
+    {g:"味わい", items:["ブリスク（爽快）","コク","渋み","まろやか","甘い余韻","青葉","ミルクに合う"]}
+  ],
+  green: [
+    {g:"香り",   items:["覆い香","若芽","青葉","火香","香ばしい","海苔のよう","花のよう"]},
+    {g:"味わい", items:["旨み","甘み","渋み","苦味","まろやか","キレ","青い"]}
+  ],
+  alcohol: [
+    {g:"果実",     items:["柑橘","りんご","洋梨","メロン","バナナ","ベリー","黒果実","トロピカル"]},
+    {g:"花・穀物", items:["花","米の旨み","麦芽","カラメル","蜂蜜","ハーブ"]},
+    {g:"樽・熟成", items:["樽","バニラ","スモーキー","ナッツ","熟成香","木香"]},
+    {g:"味わい",   items:["辛口","甘口","キレ","まろやか","苦味","渋み","ミネラル","ホップ"]},
+    {g:"欠点",     items:["老ね香","酸化","コルク臭"]}
+  ],
+  other: [
+    {g:"味わい", items:["甘い","酸っぱい","苦い","さっぱり","濃厚","炭酸感","フルーティ","こっくり"]}
+  ]
+};
 
 /* ---------- 状態 ---------- */
 var LS_KEY = "ichihai-daicho.v1";
@@ -420,7 +531,7 @@ var LS_MIGRATED = "ichihai-daicho.migrated";
 var entries = [];
 var store = null;
 var usingSample = false;
-var draft = {cat:"coffee", rating:0, cafRate:60};
+var draft = {cat:"coffee", rating:0, notes:[], axes:{}};
 var filter = "all";
 var search = "";
 var undoTimer = null;
@@ -437,8 +548,29 @@ function alcoholG(e){ return (e.cat === "alcohol" && e.abv) ? e.ml * e.abv / 100
 function round1(n){ return Math.round(n*10)/10; }
 function newId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 function catOf(k){ return CATS[k] || CATS.other; }
+function axesOf(k){ return AXES[k] || AXES.other; }
 
-/* ---------- 表示例（最初の一杯を記すまで） ---------- */
+/* SCAJ 合計。8項目すべてに点が入ったときだけ数値を返す */
+function scajTotal(cat, axes){
+  if(cat !== "coffee" || !axes) return null;
+  var spec = AXES.coffee, sum = 0;
+  for(var i = 0; i < spec.items.length; i++){
+    var v = axes[spec.items[i].k];
+    if(!v) return null;
+    sum += v;
+  }
+  return SCAJ_BASE + sum;
+}
+function axisText(item, v, max){
+  if(item.poles){
+    var word = POLE_WORDS[v] || "";
+    if(v === 3) return "中庸";
+    return word + (v < 3 ? item.poles[0] : item.poles[1]);
+  }
+  return v + "/" + max;
+}
+
+/* ---------- 表示例 ---------- */
 function sampleEntries(){
   if(sampleCache) return sampleCache;
   var base = new Date();
@@ -446,13 +578,24 @@ function sampleEntries(){
     var d = new Date(base); d.setDate(d.getDate()-back); d.setHours(h,m,0,0); return d.toISOString();
   }
   sampleCache = [
-    {id:"sample-1", ts:at(0,8,15),  cat:"coffee",  name:"ドリップコーヒー", ml:150, abv:null, caf:90, rating:4, memo:"浅煎り。柑橘の酸が気持ちいい。"},
-    {id:"sample-2", ts:at(0,11,30), cat:"green",   name:"煎茶",             ml:150, abv:null, caf:30, rating:0, memo:""},
-    {id:"sample-3", ts:at(0,15,0),  cat:"tea",     name:"ミルクティー",     ml:200, abv:null, caf:44, rating:3, memo:"茶葉はアッサム。"},
-    {id:"sample-4", ts:at(1,9,10),  cat:"coffee",  name:"カフェラテ",       ml:200, abv:null, caf:80, rating:5, memo:""},
-    {id:"sample-5", ts:at(1,19,40), cat:"alcohol", name:"ビール",           ml:350, abv:5,    caf:0,  rating:4, memo:"仕事あがりの一杯。"},
-    {id:"sample-6", ts:at(2,20,15), cat:"alcohol", name:"日本酒（一合）",   ml:180, abv:15,   caf:0,  rating:5, memo:"燗で。秋あがり。"},
-    {id:"sample-7", ts:at(3,7,50),  cat:"coffee",  name:"エスプレッソ",     ml:30,  abv:null, caf:64, rating:4, memo:""}
+    {id:"sample-1", ts:at(0,8,15), cat:"coffee", name:"エチオピア イルガチェフェ", ml:150, abv:null, rating:5,
+     notes:["ブルーベリー","ジャスミン","黒糖","紅茶のよう"],
+     axes:{clean:8,sweetness:7,acidity:8,mouthfeel:7,flavor:8,aftertaste:7,balance:7,overall:8},
+     memo:"浅煎り。冷めるにつれて紅茶のような余韻。"},
+    {id:"sample-2", ts:at(0,11,30), cat:"green", name:"煎茶（八女）", ml:150, abv:null, rating:4,
+     notes:["覆い香","旨み","若芽"], axes:{aroma:4,umami:5,astring:2,finish:4,colour:3}, memo:""},
+    {id:"sample-3", ts:at(0,15,0), cat:"tea", name:"ダージリン セカンドフラッシュ", ml:150, abv:null, rating:4,
+     notes:["マスカット","花香","ブリスク（爽快）"], axes:{aroma:5,body:3,astring:3,finish:4,colour:2}, memo:"茶葉はキャッスルトン。"},
+    {id:"sample-4", ts:at(1,9,10), cat:"coffee", name:"グアテマラ アンティグア", ml:200, abv:null, rating:4,
+     notes:["チョコレート","アーモンド","オレンジ"],
+     axes:{clean:7,sweetness:7,acidity:6,mouthfeel:7,flavor:7,aftertaste:6,balance:7,overall:7}, memo:"中深煎り。ミルクに負けない。"},
+    {id:"sample-5", ts:at(1,19,40), cat:"alcohol", name:"ペールエール", ml:350, abv:5.5, rating:4,
+     notes:["ホップ","柑橘","麦芽"], axes:{aroma:4,sweetdry:2,bodyaxis:3,acidity:2,bitter:4,finish:3}, memo:"仕事あがりの一杯。"},
+    {id:"sample-6", ts:at(2,20,15), cat:"alcohol", name:"純米吟醸", ml:180, abv:15, rating:5,
+     notes:["メロン","米の旨み","キレ"], axes:{aroma:4,sweetdry:2,bodyaxis:4,acidity:3,bitter:1,finish:4}, memo:"燗はつけずに冷やで。"},
+    {id:"sample-7", ts:at(3,7,50), cat:"coffee", name:"ケニア ニエリ", ml:30, abv:null, rating:5,
+     notes:["ブラックカラント","柑橘","黒糖"],
+     axes:{clean:8,sweetness:8,acidity:8,mouthfeel:7,flavor:8,aftertaste:8,balance:8,overall:8}, memo:"エスプレッソで。"}
   ];
   return sampleCache;
 }
@@ -464,20 +607,19 @@ function buildCatChips(){
     return '<button type="button" class="chip" data-cat="'+k+'" style="--cat:'+CATS[k].color+'" aria-pressed="false">'+
       '<span class="dot" style="background:'+CATS[k].color+'"></span>'+CATS[k].label+'</button>';
   }).join("");
-  $("catChips").addEventListener("click", function(e){
-    var b = e.target.closest("[data-cat]"); if(!b) return;
-    setCat(b.dataset.cat);
-  });
 }
 function setCat(cat){
   draft.cat = cat;
+  draft.notes = [];
+  draft.axes = {};
   Array.prototype.forEach.call($("catChips").children, function(b){
     b.setAttribute("aria-pressed", String(b.dataset.cat === cat));
   });
   $("abvField").hidden = cat !== "alcohol";
-  $("cafField").hidden = cat === "alcohol";
-  buildPresets();
-  updateDerived();
+  var c = CATS[cat].color;
+  ["notePicked","noteBox","axes","axisFoot"].forEach(function(id){ $(id).style.setProperty("--cat", c); });
+  $("axesLabel").textContent = cat === "coffee" ? "SCAJ カッピングフォーム" : "評価軸";
+  buildPresets(); buildNotes(); buildAxes();
 }
 function buildPresets(){
   $("presetChips").innerHTML = PRESETS[draft.cat].map(function(p, i){
@@ -490,7 +632,7 @@ function buildQuick(){
 }
 function buildStars(){
   $("stars").innerHTML =
-    [1,2,3,4,5].map(function(n){ return '<button type="button" class="star" data-n="'+n+'" aria-label="'+n+'点">★</button>'; }).join("") +
+    [1,2,3,4,5].map(function(n){ return '<button type="button" class="star" data-n="'+n+'" aria-label="好み'+n+'">★</button>'; }).join("") +
     '<button type="button" class="star-clear" id="starClear">消す</button>';
   paintStars();
 }
@@ -499,22 +641,75 @@ function paintStars(){
     s.classList.toggle("on", Number(s.dataset.n) <= draft.rating);
   });
 }
-function updateDerived(){
-  var ml = Number($("fMl").value) || 0;
-  var parts = ['<span>量 <b>'+ml+'</b> ml</span>'];
-  if(draft.cat === "alcohol"){
-    var abv = Number($("fAbv").value) || 0;
-    var g = ml * abv / 100 * 0.8;
-    parts.push('<span>純アルコール <b>'+round1(g)+'</b> g</span>');
-    parts.push('<span>1日20gの <b>'+Math.round(g / ALC_LIMIT * 100)+'</b>%</span>');
+
+/* ---------- フレーバー ---------- */
+function buildNotes(){
+  $("noteBox").innerHTML = FLAVORS[draft.cat].map(function(grp){
+    return '<div class="ngroup"><div class="gname">'+esc(grp.g)+'</div><div class="chips">' +
+      grp.items.map(function(n){
+        return '<button type="button" class="nchip" data-note="'+esc(n)+'" aria-pressed="'+(draft.notes.indexOf(n) >= 0)+'">'+esc(n)+'</button>';
+      }).join("") + '</div></div>';
+  }).join("");
+  paintNotes();
+}
+function paintNotes(){
+  Array.prototype.forEach.call($("noteBox").querySelectorAll(".nchip"), function(b){
+    b.setAttribute("aria-pressed", String(draft.notes.indexOf(b.dataset.note) >= 0));
+  });
+  $("notePicked").innerHTML = draft.notes.map(function(n){
+    return '<span class="ntag"><b>'+esc(n)+'</b><button type="button" data-rm="'+esc(n)+'" aria-label="'+esc(n)+'を外す">×</button></span>';
+  }).join("");
+}
+function toggleNote(n){
+  var i = draft.notes.indexOf(n);
+  if(i >= 0) draft.notes.splice(i, 1); else draft.notes.push(n);
+  paintNotes();
+}
+
+/* ---------- 評価軸 ---------- */
+function buildAxes(){
+  var spec = axesOf(draft.cat);
+  var nums = [];
+  for(var v = 1; v <= spec.max; v++) nums.push(v);
+  $("axes").innerHTML = spec.items.map(function(it){
+    var seg = '<div class="seg" data-ax="'+it.k+'" role="group" aria-label="'+esc(it.label)+'">' +
+      nums.map(function(v){
+        return '<button type="button" data-v="'+v+'" aria-pressed="false" title="もう一度押すと未評価に戻ります">'+v+'</button>';
+      }).join("") + '</div>';
+    var poles = it.poles ? '<div class="poles"><span>'+esc(it.poles[0])+'</span><span>'+esc(it.poles[1])+'</span></div>' : "";
+    return '<div class="axis"><span class="axname">'+esc(it.label)+'</span>'+seg+'</div>'+poles;
+  }).join("");
+  paintAxes();
+}
+function paintAxes(){
+  Array.prototype.forEach.call($("axes").querySelectorAll(".seg"), function(seg){
+    var cur = draft.axes[seg.dataset.ax] || 0;
+    Array.prototype.forEach.call(seg.children, function(b){
+      b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur));
+    });
+  });
+  paintAxisFoot();
+}
+function paintAxisFoot(){
+  var spec = axesOf(draft.cat);
+  var done = spec.items.filter(function(it){ return draft.axes[it.k]; }).length;
+  var box = $("axisFoot");
+  if(spec.scaj){
+    var total = scajTotal("coffee", draft.axes);
+    if(total == null){
+      box.innerHTML = '<span>基礎点 36 に8項目を足して100点満点。あと <b class="num">'+(spec.items.length - done)+'</b> 項目</span>' +
+        '<button type="button" class="linkbtn" id="fillSix">基準の6点から始める</button>';
+    }else{
+      var spec80 = total >= SPECIALTY;
+      box.innerHTML = '<span>合計 <span class="total">'+total+'</span> / 100</span>' +
+        '<span class="verdict'+(spec80 ? "" : " no")+'">'+(spec80 ? "スペシャルティの目安 80点以上" : "80点まであと "+(SPECIALTY - total)+"点")+'</span>' +
+        '<button type="button" class="linkbtn" id="clearAxes">採点を消す</button>';
+    }
   }else{
-    var caf = Number($("fCaf").value) || 0;
-    parts.push('<span>カフェイン <b>'+caf+'</b> mg</span>');
-    parts.push('<span>1日400mgの <b>'+Math.round(caf / CAF_LIMIT * 100)+'</b>%</span>');
+    box.innerHTML = done === 0
+      ? '<span>気になった軸だけ押せば大丈夫です</span>'
+      : '<span><b class="num">'+done+'</b> / '+spec.items.length+' 項目を評価</span><button type="button" class="linkbtn" id="clearAxes">評価を消す</button>';
   }
-  var box = $("derived");
-  box.innerHTML = parts.join("");
-  box.style.setProperty("--cat", CATS[draft.cat].color);
 }
 
 /* ================= 保存 ================= */
@@ -534,9 +729,7 @@ function addEntry(entry){
   entries = entries.filter(function(e){ return e.id !== entry.id; });
   entries.push(entry);
   sortEntries(); saveLocal(); renderAll();
-  if(store){
-    store.collection("drinks").doc(entry.id).set(entry).catch(noteDbError);
-  }
+  if(store) store.collection("drinks").doc(entry.id).set(entry).catch(noteDbError);
 }
 function removeEntry(id){
   var gone = null;
@@ -545,7 +738,7 @@ function removeEntry(id){
     return true;
   });
   saveLocal(); renderAll();
-  if(store){ store.collection("drinks").doc(id).delete().catch(noteDbError); }
+  if(store) store.collection("drinks").doc(id).delete().catch(noteDbError);
   showUndo(gone);
 }
 function noteDbError(err){
@@ -589,13 +782,16 @@ function connect(){
     var btn = $("exportBtn");
     btn.hidden = false;
     btn.addEventListener("click", function(){
-      var rows = [["日時","種類","名前","量(ml)","度数(%)","カフェイン(mg)","純アルコール(g)","評価","メモ"]];
+      var rows = [["日時","種類","名前","量(ml)","度数(%)","純アルコール(g)","好み","SCAJ合計","評価軸","フレーバー","メモ"]];
       view().slice().sort(function(a,b){ return a.ts.localeCompare(b.ts); }).forEach(function(e){
-        var d = new Date(e.ts);
+        var d = new Date(e.ts), spec = axesOf(e.cat);
+        var ax = spec.items.filter(function(it){ return e.axes && e.axes[it.k]; })
+          .map(function(it){ return it.label + ":" + e.axes[it.k]; }).join(" / ");
         rows.push([
           d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes()),
-          catOf(e.cat).label, e.name, e.ml, (e.abv == null ? "" : e.abv),
-          e.caf || 0, round1(alcoholG(e)), e.rating || "", (e.memo || "").replace(/\n/g, " ")
+          catOf(e.cat).label, e.name, e.ml, (e.abv == null ? "" : e.abv), round1(alcoholG(e)),
+          e.rating || "", (scajTotal(e.cat, e.axes) || ""), ax, (e.notes || []).join(" / "),
+          (e.memo || "").replace(/\n/g, " ")
         ]);
       });
       var csv = "﻿" + rows.map(function(r){
@@ -608,7 +804,7 @@ function connect(){
   }).catch(function(){});
 }
 
-/* ================= 今日のグラス ================= */
+/* ================= 今日の一杯 ================= */
 var glassSeq = 0;
 function glassSVG(pct, color, over){
   var top = 14, bottom = 108;
@@ -636,10 +832,11 @@ function renderToday(){
   var list = view();
   var key = dayKey(new Date());
   var today = list.filter(function(e){ return dayKey(new Date(e.ts)) === key; });
-  var caf = today.reduce(function(s,e){ return s + (e.caf || 0); }, 0);
   var alc = today.reduce(function(s,e){ return s + alcoholG(e); }, 0);
   var ml  = today.reduce(function(s,e){ return s + (e.ml || 0); }, 0);
-  var cafOver = caf > CAF_LIMIT, alcOver = alc > ALC_LIMIT;
+  var rated = today.filter(function(e){ return e.rating; });
+  var avg = rated.length ? rated.reduce(function(s,e){ return s + e.rating; }, 0) / rated.length : 0;
+  var alcOver = alc > ALC_LIMIT;
 
   var byCat = CAT_KEYS.map(function(k){
     return {k:k, n: today.filter(function(e){ return e.cat === k; }).length};
@@ -647,9 +844,6 @@ function renderToday(){
   var maxN = Math.max.apply(null, [1].concat(byCat.map(function(x){ return x.n; })));
 
   $("todayCount").textContent = today.length + "杯";
-
-  var cafNote = cafOver ? "1日の目安 400mg を超えています"
-                        : "目安まであと " + Math.round(CAF_LIMIT - caf) + "mg";
   var alcNote = alcOver ? "適度な飲酒 20g を超えています"
                         : (alc > 0 ? "適量まであと " + round1(ALC_LIMIT - alc) + "g" : "今日はまだ飲んでいません");
 
@@ -663,12 +857,6 @@ function renderToday(){
 
   $("today").innerHTML =
     '<div class="meter">' +
-      glassSVG(caf / CAF_LIMIT, "var(--coffee)", cafOver) +
-      '<div class="meter-label">カフェイン</div>' +
-      '<div class="meter-val">'+Math.round(caf)+'<span class="of"> / '+CAF_LIMIT+' mg</span></div>' +
-      '<div class="meter-note'+(cafOver ? " over" : "")+'">'+cafNote+'</div>' +
-    '</div>' +
-    '<div class="meter">' +
       glassSVG(alc / ALC_LIMIT, "var(--alcohol)", alcOver) +
       '<div class="meter-label">純アルコール</div>' +
       '<div class="meter-val">'+round1(alc)+'<span class="of"> / '+ALC_LIMIT+' g</span></div>' +
@@ -677,6 +865,7 @@ function renderToday(){
     '<div class="totals">' +
       '<div class="tline"><span class="k">杯数</span><span class="v">'+today.length+'<small>杯</small></span></div>' +
       '<div class="tline"><span class="k">総量</span><span class="v">'+ml+'<small>ml</small></span></div>' +
+      '<div class="tline"><span class="k">好みの平均</span><span class="v">'+(avg ? round1(avg) : "—")+'<small>'+(avg ? " / 5" : "")+'</small></span></div>' +
       totals +
     '</div>';
 }
@@ -731,6 +920,69 @@ function renderChart(){
   $("chartbox").innerHTML = s;
 }
 
+/* ================= 味の記録 ================= */
+function renderScoreChart(){
+  var scored = view().filter(function(e){ return scajTotal(e.cat, e.axes) != null; })
+    .sort(function(a,b){ return a.ts.localeCompare(b.ts); }).slice(-12);
+  if(scored.length === 0){
+    $("scoreChart").innerHTML = '<p class="nodata">珈琲を選んで8項目すべてに点を入れると、ここに100点法のスコアが並びます。基礎点36点＋各項目最大8点、80点以上がスペシャルティの目安です。</p>';
+    return;
+  }
+  var vals = scored.map(function(e){ return scajTotal(e.cat, e.axes); });
+  var lo = Math.min(SPECIALTY - 6, Math.floor((Math.min.apply(null, vals) - 3) / 5) * 5);
+  var hi = 100;
+  var W = 460, H = 176, padL = 30, padR = 14, padT = 16, padB = 30;
+  var plotW = W - padL - padR, plotH = H - padT - padB;
+  function yOf(v){ return padT + plotH - (v - lo) / (hi - lo) * plotH; }
+  function xOf(i){ return scored.length === 1 ? padL + plotW / 2 : padL + (i / (scored.length - 1)) * plotW; }
+
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="珈琲のカッピングスコアの推移">';
+  [lo, Math.round((lo + hi) / 2), hi].forEach(function(t){
+    s += '<line x1="'+padL+'" y1="'+yOf(t)+'" x2="'+(W - padR)+'" y2="'+yOf(t)+'" stroke="var(--line)" stroke-width="1"/>';
+    s += '<text class="axis-txt" x="'+(padL - 7)+'" y="'+(yOf(t) + 3.5)+'" text-anchor="end">'+t+'</text>';
+  });
+  s += '<line x1="'+padL+'" y1="'+yOf(SPECIALTY)+'" x2="'+(W - padR)+'" y2="'+yOf(SPECIALTY)+
+       '" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3"/>';
+  s += '<text class="axis-txt" x="'+(W - padR)+'" y="'+(yOf(SPECIALTY) - 5)+'" text-anchor="end" fill="var(--accent)">スペシャルティ 80</text>';
+
+  var line = scored.map(function(e, i){ return (i ? "L" : "M") + xOf(i) + " " + yOf(vals[i]); }).join(" ");
+  if(scored.length > 1) s += '<path d="'+line+'" fill="none" stroke="var(--coffee)" stroke-width="1.6" stroke-linejoin="round"/>';
+  scored.forEach(function(e, i){
+    var d = new Date(e.ts);
+    s += '<circle cx="'+xOf(i)+'" cy="'+yOf(vals[i])+'" r="4" fill="var(--coffee)"><title>'+esc(e.name)+' '+vals[i]+'点</title></circle>';
+    s += '<text class="axis-txt" x="'+xOf(i)+'" y="'+(yOf(vals[i]) - 9)+'" text-anchor="middle" fill="var(--ink-2)">'+vals[i]+'</text>';
+    if(scored.length <= 8 || i % 2 === 0){
+      s += '<text class="axis-txt" x="'+xOf(i)+'" y="'+(H - 8)+'" text-anchor="middle">'+(d.getMonth()+1)+'/'+d.getDate()+'</text>';
+    }
+  });
+  s += '<line x1="'+padL+'" y1="'+(padT + plotH)+'" x2="'+(W - padR)+'" y2="'+(padT + plotH)+'" stroke="var(--line-strong)" stroke-width="1"/>';
+  s += '</svg>';
+  $("scoreChart").innerHTML = s;
+}
+function renderFlavRank(){
+  var tally = {};
+  view().forEach(function(e){
+    (e.notes || []).forEach(function(n){
+      if(!tally[n]) tally[n] = {n:n, c:0, cats:{}};
+      tally[n].c++;
+      tally[n].cats[e.cat] = (tally[n].cats[e.cat] || 0) + 1;
+    });
+  });
+  var rows = Object.keys(tally).map(function(k){ return tally[k]; })
+    .sort(function(a,b){ return b.c - a.c || a.n.localeCompare(b.n); }).slice(0, 8);
+  if(rows.length === 0){
+    $("flavRank").innerHTML = '<p class="nodata">フレーバーノートを選んで記録すると、よく書いた言葉が多い順に並びます。</p>';
+    return;
+  }
+  var max = rows[0].c;
+  $("flavRank").innerHTML = '<div class="rank">' + rows.map(function(r){
+    var top = Object.keys(r.cats).sort(function(a,b){ return r.cats[b] - r.cats[a]; })[0];
+    return '<div class="rankrow" style="--c:'+catOf(top).color+'">' +
+      '<span>'+esc(r.n)+'</span><span class="rbar"><i style="width:'+(r.c / max * 100)+'%"></i></span>' +
+      '<span class="rn">'+r.c+'</span></div>';
+  }).join("") + '</div>';
+}
+
 /* ================= 台帳 ================= */
 function buildFilters(){
   function mk(k, label, color){
@@ -743,7 +995,10 @@ function buildFilters(){
 function renderLedger(){
   var list = view().filter(function(e){
     if(filter !== "all" && e.cat !== filter) return false;
-    if(search && ((e.name || "") + " " + (e.memo || "")).toLowerCase().indexOf(search) === -1) return false;
+    if(search){
+      var hay = ((e.name || "") + " " + (e.memo || "") + " " + (e.notes || []).join(" ")).toLowerCase();
+      if(hay.indexOf(search) === -1) return false;
+    }
     return true;
   });
   $("ledgerCount").textContent = list.length + "件";
@@ -755,8 +1010,7 @@ function renderLedger(){
 
   if(list.length === 0){
     $("ledger").innerHTML = '<p class="empty">' +
-      ((search || filter !== "all") ? "この条件に合う記録はありません。" : "まだ一杯も記されていません。左のフォームから記録できます。") +
-      '</p>';
+      ((search || filter !== "all") ? "この条件に合う記録はありません。" : "まだ一杯も記されていません。左のフォームから記録できます。") + '</p>';
     return;
   }
 
@@ -770,38 +1024,51 @@ function renderLedger(){
   });
 
   $("ledger").innerHTML = groups.map(function(g){
-    var caf = g.items.reduce(function(s,e){ return s + (e.caf || 0); }, 0);
     var alc = g.items.reduce(function(s,e){ return s + alcoholG(e); }, 0);
     var sums = ['<span>'+g.items.length+'杯</span>'];
-    if(caf > 0) sums.push('<span>カフェイン '+Math.round(caf)+'mg</span>');
     if(alc > 0) sums.push('<span>純アルコール '+round1(alc)+'g</span>');
     return '<div class="daygroup">' +
       '<div class="dayhead">' +
         '<div class="daydate">'+(g.d.getMonth()+1)+'月'+g.d.getDate()+'日<span class="wd">'+WD[g.d.getDay()]+'曜</span></div>' +
         '<div class="daysum">'+sums.join("")+'</div>' +
-      '</div>' +
-      g.items.map(entryRow).join("") +
-    '</div>';
+      '</div>' + g.items.map(entryRow).join("") + '</div>';
   }).join("");
 }
 function entryRow(e){
   var d = new Date(e.ts);
   var c = catOf(e.cat);
+  var spec = axesOf(e.cat);
   var metrics = ['<span>'+e.ml+' ml</span>'];
   if(e.cat === "alcohol"){
     if(e.abv) metrics.push('<span>'+e.abv+' %</span>');
     metrics.push('<span>純アルコール '+round1(alcoholG(e))+' g</span>');
-  }else if(e.caf > 0){
-    metrics.push('<span>カフェイン '+e.caf+' mg</span>');
   }
+  var total = scajTotal(e.cat, e.axes);
+  var badge = total != null
+    ? '<span class="scorebadge'+(total >= SPECIALTY ? " spec" : "")+'">SCAJ '+total+'</span>' : "";
+
+  var axList = spec.items.filter(function(it){ return e.axes && e.axes[it.k]; });
+  var axHtml = "";
+  if(axList.length && total == null){
+    axHtml = '<div class="axline">' + axList.map(function(it){
+      return '<span>'+esc(it.label)+' <b>'+esc(axisText(it, e.axes[it.k], spec.max))+'</b></span>';
+    }).join("") + '</div>';
+  }else if(axList.length){
+    axHtml = '<div class="axline">' + axList.map(function(it){
+      return '<span>'+esc(it.label)+' <b>'+e.axes[it.k]+'</b></span>';
+    }).join("") + '</div>';
+  }
+  var flav = (e.notes && e.notes.length)
+    ? '<div class="flav">' + e.notes.map(function(n){ return '<span>'+esc(n)+'</span>'; }).join("") + '</div>' : "";
+
   return '<div class="entry" style="--c:'+c.color+'">' +
     '<div class="time">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>' +
     '<div class="main">' +
       '<div class="nm"><span class="swatch"></span><span class="title">'+esc(e.name)+'</span>' +
         '<span class="catname">'+c.label+'</span>' +
-        (e.rating ? '<span class="rate">'+"★".repeat(e.rating)+'</span>' : '') +
+        (e.rating ? '<span class="rate">'+"★".repeat(e.rating)+'</span>' : '') + badge +
       '</div>' +
-      '<div class="metrics">'+metrics.join("")+'</div>' +
+      '<div class="metrics">'+metrics.join("")+'</div>' + flav + axHtml +
       (e.memo ? '<div class="memo">'+esc(e.memo)+'</div>' : '') +
     '</div>' +
     '<div class="acts">' +
@@ -826,33 +1093,26 @@ function showUndo(entry){
 
 /* ================= 配線 ================= */
 function wire(){
+  $("catChips").addEventListener("click", function(e){
+    var b = e.target.closest("[data-cat]"); if(!b) return;
+    setCat(b.dataset.cat);
+  });
+
   $("presetChips").addEventListener("click", function(e){
     var b = e.target.closest("[data-i]"); if(!b) return;
     var p = PRESETS[draft.cat][Number(b.dataset.i)];
     $("fName").value = p.name;
     $("fMl").value = p.ml;
-    if(draft.cat === "alcohol"){ $("fAbv").value = p.abv; }
-    else { draft.cafRate = p.caf; $("fCaf").value = Math.round(p.ml * p.caf / 100); }
-    updateDerived();
+    if(draft.cat === "alcohol" && p.abv) $("fAbv").value = p.abv;
   });
 
   $("mlQuick").addEventListener("click", function(e){
     var b = e.target.closest("[data-ml]"); if(!b) return;
-    var ml = Number(b.dataset.ml);
-    $("fMl").value = ml;
-    if(draft.cat !== "alcohol") $("fCaf").value = Math.round(ml * draft.cafRate / 100);
-    updateDerived();
+    $("fMl").value = b.dataset.ml;
   });
   $("abvQuick").addEventListener("click", function(e){
     var b = e.target.closest("[data-abv]"); if(!b) return;
-    $("fAbv").value = b.dataset.abv; updateDerived();
-  });
-  $("cafQuick").addEventListener("click", function(e){
-    var b = e.target.closest("[data-caf]"); if(!b) return;
-    $("fCaf").value = b.dataset.caf;
-    var ml = Number($("fMl").value) || 1;
-    draft.cafRate = Number(b.dataset.caf) / ml * 100;
-    updateDerived();
+    $("fAbv").value = b.dataset.abv;
   });
 
   $("stars").addEventListener("click", function(e){
@@ -861,8 +1121,35 @@ function wire(){
     if(e.target.id === "starClear"){ draft.rating = 0; paintStars(); }
   });
 
-  ["fMl","fAbv","fCaf"].forEach(function(id){
-    $(id).addEventListener("input", updateDerived);
+  $("noteBox").addEventListener("click", function(e){
+    var b = e.target.closest("[data-note]"); if(!b) return;
+    toggleNote(b.dataset.note);
+  });
+  $("notePicked").addEventListener("click", function(e){
+    var b = e.target.closest("[data-rm]"); if(!b) return;
+    toggleNote(b.dataset.rm);
+  });
+  $("noteAdd").addEventListener("keydown", function(e){
+    if(e.key !== "Enter") return;
+    e.preventDefault();
+    var v = e.target.value.trim();
+    if(v && draft.notes.indexOf(v) === -1){ draft.notes.push(v); paintNotes(); }
+    e.target.value = "";
+  });
+
+  $("axes").addEventListener("click", function(e){
+    var b = e.target.closest("[data-v]"); if(!b) return;
+    var k = b.parentNode.dataset.ax, v = Number(b.dataset.v);
+    if(draft.axes[k] === v) delete draft.axes[k]; else draft.axes[k] = v;
+    paintAxes();
+  });
+  $("axisFoot").addEventListener("click", function(e){
+    if(e.target.id === "fillSix"){
+      AXES.coffee.items.forEach(function(it){ if(!draft.axes[it.k]) draft.axes[it.k] = 6; });
+      paintAxes();
+    }else if(e.target.id === "clearAxes"){
+      draft.axes = {}; paintAxes();
+    }
   });
 
   $("form").addEventListener("submit", function(e){
@@ -879,13 +1166,15 @@ function wire(){
       name: name,
       ml: Number($("fMl").value) || 0,
       abv: isAlc ? (Number($("fAbv").value) || 0) : null,
-      caf: isAlc ? 0 : (Number($("fCaf").value) || 0),
       rating: draft.rating,
+      notes: draft.notes.slice(),
+      axes: Object.assign({}, draft.axes),
       memo: $("fMemo").value.trim()
     });
     $("fMemo").value = "";
-    draft.rating = 0; paintStars();
     $("fWhen").value = toLocalInput(new Date());
+    draft.rating = 0; draft.notes = []; draft.axes = {};
+    paintStars(); paintNotes(); paintAxes();
     $("formHint").textContent = "「" + name + "」を記しました";
     setTimeout(function(){ $("formHint").textContent = "記録は自動で保存されます"; }, 2600);
   });
@@ -897,7 +1186,6 @@ function wire(){
   $("searchBox").addEventListener("input", function(e){
     search = e.target.value.trim().toLowerCase(); renderLedger();
   });
-
   $("sampleBar").addEventListener("click", function(e){
     if(e.target.id === "clearSample"){ usingSample = false; renderAll(); }
   });
@@ -908,8 +1196,10 @@ function wire(){
       var src = null, all = view();
       for(var i = 0; i < all.length; i++){ if(all[i].id === again.dataset.again){ src = all[i]; break; } }
       if(!src) return;
-      var copy = Object.assign({}, src, {id:newId(), ts:new Date().toISOString(), memo:""});
-      addEntry(copy);
+      addEntry(Object.assign({}, src, {
+        id:newId(), ts:new Date().toISOString(), memo:"",
+        notes:(src.notes || []).slice(), axes:Object.assign({}, src.axes)
+      }));
       return;
     }
     var del = e.target.closest("[data-del]");
@@ -924,7 +1214,7 @@ function wire(){
 /* ================= 起動 ================= */
 function renderAll(){
   if(!usingSample && entries.length === 0) usingSample = true;
-  renderToday(); renderChart(); renderLedger();
+  renderToday(); renderChart(); renderScoreChart(); renderFlavRank(); renderLedger();
 }
 function boot(){
   var now = new Date();
