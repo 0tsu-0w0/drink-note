@@ -358,7 +358,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
       <div class="panel-head"><h2 class="panel-title">味の記録</h2><span class="eyebrow">カッピングスコアとフレーバー</span></div>
       <div class="taste">
         <div>
-          <p class="subhead">珈琲のカッピングスコア（SCAJ 100点法）</p>
+          <p class="subhead">コーヒーのカッピングスコア（SCAJ 100点法）</p>
           <div id="scoreChart"></div>
         </div>
         <div>
@@ -381,7 +381,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 </div>
 
 <div class="foot">
-  <p>珈琲の評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。基礎点36点に、8項目（カップのきれいさ／甘さ／酸の質／口に含んだ質感／風味／後味の印象度／バランス／総合評価）を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安。実際のカッピングは0.5点刻みで採点しますが、ここでは1点刻みにしています。</p>
+  <p>コーヒーの評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。基礎点36点に、8項目（カップのきれいさ／甘さ／酸の質／口に含んだ質感／風味／後味の印象度／バランス／総合評価）を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安。実際のカッピングは0.5点刻みで採点しますが、ここでは1点刻みにしています。</p>
   <p>フレーバーの語彙は <b>SCA / World Coffee Research のコーヒーフレーバーホイール</b>の分類を、日本茶の「覆い香」「火香」などは日本茶の審査用語を参考にしました。お酒の甘辛・淡麗濃醇は日本酒の味わいの捉え方に倣った双極の軸です。焙煎度はライトからイタリアンまでの8段階の慣用的な分類で、丸の色はおおよその豆の色を表しています。</p>
   <p>語彙は自分で足せます。追加した言葉はその種類の一覧にずっと残り、記録した過去の一杯からは消えません。</p>
 </div>
@@ -391,7 +391,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 
 /* ---------- 種類と、その液の色 ---------- */
 var CATS = {
-  coffee : {label:"珈琲",   color:"var(--coffee)"},
+  coffee : {label:"コーヒー", color:"var(--coffee)"},
   tea    : {label:"紅茶",   color:"var(--tea)"},
   green  : {label:"日本茶", color:"var(--green)"},
   alcohol: {label:"お酒",   color:"var(--alcohol)"},
@@ -966,7 +966,7 @@ function renderScoreChart(){
   var scored = view().filter(function(e){ return scajTotal(e.cat, e.axes) != null; })
     .sort(function(a,b){ return a.ts.localeCompare(b.ts); }).slice(-12);
   if(scored.length === 0){
-    $("scoreChart").innerHTML = '<p class="nodata">珈琲を選んで8項目すべてに点を入れると、ここに100点法のスコアが並びます。基礎点36点＋各項目最大8点、80点以上がスペシャルティの目安です。</p>';
+    $("scoreChart").innerHTML = '<p class="nodata">コーヒーを選んで8項目すべてに点を入れると、ここに100点法のスコアが並びます。基礎点36点＋各項目最大8点、80点以上がスペシャルティの目安です。</p>';
     return;
   }
   var vals = scored.map(function(e){ return scajTotal(e.cat, e.axes); });
@@ -977,7 +977,7 @@ function renderScoreChart(){
   function yOf(v){ return padT + plotH - (v - lo) / (hi - lo) * plotH; }
   function xOf(i){ return scored.length === 1 ? padL + plotW / 2 : padL + (i / (scored.length - 1)) * plotW; }
 
-  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="珈琲のカッピングスコアの推移">';
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="コーヒーのカッピングスコアの推移">';
   [lo, Math.round((lo + hi) / 2), hi].forEach(function(t){
     s += '<line x1="'+padL+'" y1="'+yOf(t)+'" x2="'+(W - padR)+'" y2="'+yOf(t)+'" stroke="var(--line)" stroke-width="1"/>';
     s += '<text class="axis-txt" x="'+(padL - 7)+'" y="'+(yOf(t) + 3.5)+'" text-anchor="end">'+t+'</text>';
