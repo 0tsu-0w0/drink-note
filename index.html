@@ -144,7 +144,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 .axis-foot .verdict.no{color:var(--muted); font-weight:400}
 .linkbtn{background:none; border:0; padding:0; font-size:11.5px; color:var(--accent); text-decoration:underline; text-underline-offset:2px}
 
-/* ---------- pair (おつまみ) ---------- */
+/* ---------- pair (ペアリング) ---------- */
 .pairtoggle{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-2)}
 .pairtoggle input{width:15px; height:15px; accent-color:var(--food); margin:0}
 .pairblock{border:1px solid var(--line); border-left:2px solid var(--food); background:var(--surface-2); padding:11px; display:flex; flex-direction:column; gap:10px}
@@ -336,13 +336,13 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
       </div>
 
       <div id="pairSection">
-        <div class="section-rule">おつまみ</div>
+        <div class="section-rule">ペアリング</div>
         <label class="pairtoggle" style="margin:10px 0">
-          <input type="checkbox" id="pairToggle"> おつまみも一緒に記録する
+          <input type="checkbox" id="pairToggle"> ペアリングも一緒に記録する
         </label>
         <div id="pairBody" hidden>
           <div class="foodlist" id="foodList"></div>
-          <button type="button" class="addfood" id="addFood" style="width:100%; margin-top:10px">おつまみを追加</button>
+          <button type="button" class="addfood" id="addFood" style="width:100%; margin-top:10px">ペアリングを追加</button>
         </div>
       </div>
 
@@ -396,7 +396,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 </div>
 
 <div class="foot">
-  <p>設計は <a href="https://github.com/GenbuHase/Sakemem" target="_blank" rel="noopener">Sakemem</a> を参考にしています。カテゴリの下に<b>種類</b>を置き、種類によって評価軸が切り替わる構造（ワインの赤／白、ウイスキーのスコッチ／バーボンなど）、飲みものとおつまみを同格の記録として扱い<b>ペア</b>で結ぶ考え方、補助情報と場所を持つ点を取り入れました。</p>
+  <p>設計は <a href="https://github.com/GenbuHase/Sakemem" target="_blank" rel="noopener">Sakemem</a> を参考にしています。カテゴリの下に<b>種類</b>を置き、種類によって評価軸が切り替わる構造（ワインの赤／白、ウイスキーのスコッチ／バーボンなど）、飲みものとペアリングを同格の記録として扱い<b>ペア</b>で結ぶ考え方、補助情報と場所を持つ点を取り入れました。</p>
   <p>コーヒーの評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。基礎点36点に、8項目（カップのきれいさ／甘さ／酸の質／口に含んだ質感／風味／後味の印象度／バランス／総合評価）を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安。実際のカッピングは0.5点刻みですが、ここでは1点刻みです。</p>
   <p>フレーバーの語彙は <b>SCA / World Coffee Research のコーヒーフレーバーホイール</b>の分類を、日本茶の「覆い香」「火香」などは日本茶の審査用語を参考にしました。焙煎度はライトからイタリアンまでの8段階で、丸の色はおおよその豆の色です。語彙は自分で足せます。追加した言葉はその系統の一覧に残り、記録した過去の一杯からは消えません。</p>
 </div>
@@ -410,7 +410,7 @@ var FAMILIES = {
   tea:    {label:"紅茶",     color:"var(--tea)"},
   green:  {label:"日本茶",   color:"var(--green)"},
   liquor: {label:"お酒",     color:"var(--alcohol)"},
-  food:   {label:"おつまみ", color:"var(--food)"},
+  food:   {label:"ペアリング", color:"var(--food)"},
   other:  {label:"その他",   color:"var(--other)"}
 };
 var FAM_KEYS = ["coffee","tea","green","liquor","food","other"];
@@ -427,7 +427,7 @@ var CATS = {
   whiskey:  {label:"ウイスキー", fam:"liquor"},
   liqueur:  {label:"リキュール", fam:"liquor"},
   cocktail: {label:"カクテル",   fam:"liquor"},
-  food:     {label:"おつまみ",   fam:"food"},
+  food:     {label:"ペアリング", fam:"food"},
   other:    {label:"その他",     fam:"other"}
 };
 var CAT_KEYS = ["coffee","tea","green","sake","beer","wine","sour","shochu","whiskey","liqueur","cocktail","food","other"];
@@ -476,7 +476,7 @@ var AXES = {
   whiskey:  {max:5, items:[{k:"aroma",label:"香り"},{k:"smoky",label:"スモーキー"},{k:"finish",label:"キレ"}]},
   liqueur:  {max:5, items:[{k:"sweetness",label:"甘さ"},{k:"acidity",label:"酸味"},{k:"fruitiness",label:"果実感"}]},
   cocktail: {max:5, items:[{k:"sweetness",label:"甘さ"},{k:"acidity",label:"酸味"},{k:"balance",label:"バランス"}]},
-  food:     {max:5, items:[{k:"saltiness",label:"塩味"},{k:"umami",label:"旨み"},{k:"spiciness",label:"辛み"}]},
+  food:     {max:5, items:[{k:"saltiness",label:"塩味"},{k:"sweetness",label:"甘み"},{k:"umami",label:"旨み"},{k:"spiciness",label:"辛み"}]},
   other:    {max:5, items:[{k:"aroma",label:"香り"},{k:"body",label:"コク"},{k:"finish",label:"キレ"}]}
 };
 /* 種類によって評価軸が入れ替わるもの */
@@ -566,7 +566,7 @@ var ORIGIN = {
   ],
   sake:LIQUOR_ORIGIN, beer:LIQUOR_ORIGIN, wine:LIQUOR_ORIGIN, sour:LIQUOR_ORIGIN,
   shochu:LIQUOR_ORIGIN, whiskey:LIQUOR_ORIGIN, liqueur:LIQUOR_ORIGIN, cocktail:LIQUOR_ORIGIN,
-  food: [{k:"maker", label:"店・作った人", wide:true}],
+  food: [{k:"maker", label:"店・作り手", wide:true}],
   other:[{k:"origin", label:"産地", wide:true},{k:"maker", label:"造り手・ブランド", wide:true}]
 };
 /* すべてのカテゴリに共通で付く欄 */
@@ -604,8 +604,9 @@ var FLAVORS = {
     {g:"欠点",     items:["老ね香","酸化","コルク臭"]}
   ],
   food: [
-    {g:"味",   items:["塩気","旨み","甘い","酸味","苦味","辛い","だし"]},
-    {g:"香り・食感", items:["香ばしい","燻製","発酵","脂の甘み","にんにく","さっぱり","こってり","歯ごたえ","ほろほろ"]}
+    {g:"味",         items:["塩気","旨み","甘い","酸味","苦味","辛い","だし"]},
+    {g:"香り・食感", items:["香ばしい","燻製","発酵","脂の甘み","にんにく","さっぱり","こってり","歯ごたえ","ほろほろ"]},
+    {g:"甘いもの",   items:["チョコレート","バター","クリーム","焼き菓子","餡","果実","メープル","スパイス"]}
   ],
   other: [
     {g:"味わい", items:["甘い","酸っぱい","苦い","さっぱり","濃厚","炭酸感","フルーティ","こっくり"]}
@@ -860,12 +861,12 @@ function paintAxisFoot(){
   }
 }
 
-/* ---------- おつまみ（ペア） ---------- */
+/* ---------- ペアリング（ペア） ---------- */
 function blankFood(){ return {name:"", sub:"", rating:0, axes:{}, memo:""}; }
 function buildFoods(){
   $("foodList").innerHTML = draft.foods.map(function(f, i){
     return '<div class="pairblock" data-fi="'+i+'" style="--cat:var(--food)">' +
-      '<div class="pairblock-head"><span class="eyebrow">おつまみ '+(i+1)+'</span>' +
+      '<div class="pairblock-head"><span class="eyebrow">ペアリング '+(i+1)+'</span>' +
         (draft.foods.length > 1 ? '<button type="button" class="linkbtn" data-fdel="'+i+'">消す</button>' : '') +
       '</div>' +
       '<div class="field"><label>名前</label><input type="text" data-ff="name" value="'+esc(f.name)+'"></div>' +
@@ -989,7 +990,7 @@ function connect(){
         }).join(" / ");
         rows.push([
           d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes()),
-          isFood(e.cat) ? "おつまみ" : "飲みもの", catOf(e.cat).label, styleLabel(e.cat, e.style),
+          isFood(e.cat) ? "ペアリング" : "飲みもの", catOf(e.cat).label, styleLabel(e.cat, e.style),
           e.name, org, e.rating || "", (scajTotal(e.cat, e.axes) || ""), ax,
           e.notes.join(" / "), e.pairId || "", (e.memo || "").replace(/\n/g, " ")
         ]);
@@ -1060,7 +1061,7 @@ function renderAnalysis(){
     '<div class="anum">' +
       '<div><span class="k">記録数</span><span class="v">'+entries.length+'</span></div>' +
       '<div><span class="k">飲みもの</span><span class="v">'+drinks+'</span></div>' +
-      '<div><span class="k">おつまみ</span><span class="v">'+foods+'</span></div>' +
+      '<div><span class="k">ペアリング</span><span class="v">'+foods+'</span></div>' +
       '<div><span class="k">ペア記録</span><span class="v">'+Object.keys(pairs).length+'</span></div>' +
     '</div>' +
     '<div class="catrows">' + rows.map(function(r){
@@ -1187,7 +1188,7 @@ function renderFlavRank(){
 
 /* ================= 一覧 ================= */
 function buildFilters(){
-  var kinds = [["all","すべて"],["drink","飲みもの"],["food","おつまみ"]];
+  var kinds = [["all","すべて"],["drink","飲みもの"],["food","ペアリング"]];
   $("kindChips").innerHTML = kinds.map(function(k){
     return '<button type="button" class="chip sm" data-kind="'+k[0]+'" style="--cat:var(--accent)" aria-pressed="'+(kindFilter === k[0])+'">'+k[1]+'</button>';
   }).join("");
@@ -1386,7 +1387,7 @@ function wire(){
     }
   });
 
-  /* おつまみ */
+  /* ペアリング */
   $("pairToggle").addEventListener("change", function(e){
     $("pairBody").hidden = !e.target.checked;
     if(e.target.checked && draft.foods.length === 0){ draft.foods = [blankFood()]; buildFoods(); }
@@ -1454,7 +1455,7 @@ function wire(){
     draft.rating = 0; draft.notes = []; draft.axes = {}; draft.foods = [];
     $("pairToggle").checked = false; $("pairBody").hidden = true;
     buildFoods(); paintStars(); paintNotes(); paintAxes();
-    $("formHint").textContent = "「" + name + "」を記しました" + (foods.length ? "（おつまみ"+foods.length+"品と一緒に）" : "") + "。素性はそのまま残しています";
+    $("formHint").textContent = "「" + name + "」を記しました" + (foods.length ? "（ペアリング"+foods.length+"品と一緒に）" : "") + "。素性はそのまま残しています";
     setTimeout(function(){ $("formHint").textContent = "記録は自動で保存されます"; }, 3400);
   });
 
