@@ -43,6 +43,8 @@ export function AuthForm({ mode, next }: { mode: "login" | "signup"; next?: stri
         {mode === "login" ? (
           <>
             はじめての方は <Link href="/signup">新規登録</Link>
+            <br />
+            パスワードを忘れた方は <Link href="/reset">再設定</Link>
           </>
         ) : (
           <>

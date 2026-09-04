@@ -18,6 +18,9 @@ export function Header({ email }: { email?: string | null }) {
               <Link href="/records/new" className="iconbtn">
                 記録する
               </Link>
+              <Link href="/reset/new" className="iconbtn">
+                パスワード変更
+              </Link>
               <form action={signOut}>
                 <button type="submit" className="iconbtn">
                   ログアウト

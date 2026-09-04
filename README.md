@@ -54,6 +54,8 @@ Supabase の **Authentication → URL Configuration** に登録します。
 - **Site URL:** `http://localhost:3000`（本番は Vercel の URL）
 - **Redirect URLs:** `http://localhost:3000/auth/callback` と `https://<本番ドメイン>/auth/callback`
 
+確認メールとパスワード再設定メールは、どちらもこの `/auth/callback` に戻ってきます。
+
 メール確認を省きたい場合は **Authentication → Providers → Email** の
 "Confirm email" を切ると、登録直後にそのままログインできます。
 
@@ -89,6 +91,8 @@ npm run dev
   ポリシーが行うため、キーが知られても他人のデータには届きません。
 - パスワードの保管と検証は Supabase Auth が行い、このリポジトリのコードは平文のパスワードを
   保存も送信もしません。
+- 再設定メールの送信は、宛先が登録済みかどうかで応答を変えません。どのアドレスが登録されて
+  いるかを外から探れないようにするためです。
 
 ## 構成
 
@@ -100,11 +104,13 @@ src/
 │   ├── layout.tsx
 │   ├── page.tsx            # ランディング（ログイン済みなら /records へ）
 │   ├── login/, signup/     # 認証画面
-│   ├── auth/callback/      # 確認メールからの戻り先
+│   ├── reset/, reset/new/  # パスワードの再設定
+│   ├── auth/callback/      # 確認メール・再設定メールからの戻り先
 │   └── records/            # 一覧・新規・編集
 ├── components/
 │   ├── header.tsx
 │   ├── auth-form.tsx
+│   ├── reset-forms.tsx
 │   ├── record-form.tsx     # 記録フォーム（カテゴリ・種類・素性・評価軸・ペアリング）
 │   └── records-view.tsx    # 一覧・概要・チャート・絞り込み
 ├── lib/

@@ -76,6 +76,56 @@ export async function signOut() {
   redirect("/login");
 }
 
+/** 再設定メールを送る。宛先が登録済みかどうかは答えを変えず、外から探れないようにする。 */
+export async function requestPasswordReset(
+  _prev: ActionResult | null,
+  formData: FormData,
+): Promise<ActionResult> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { ok: false, message: "メールアドレスを入れてください。" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl()}/auth/callback?next=/reset/new`,
+  });
+
+  /* 実際の結果に関わらず同じ文面を返す。ただし送信制限だけは伝える。 */
+  if (error && /rate limit|too many/i.test(error.message)) {
+    return { ok: false, message: "送信が続いたため一時的に制限されています。しばらく待ってからやり直してください。" };
+  }
+  return {
+    ok: false,
+    message: `${email} が登録済みであれば、再設定用のリンクを送りました。メールを確認してください。`,
+  };
+}
+
+/** 再設定リンクから戻ってきた状態、またはログイン中にパスワードを変える */
+export async function updatePassword(
+  _prev: ActionResult | null,
+  formData: FormData,
+): Promise<ActionResult> {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+  if (password.length < 8) return { ok: false, message: "パスワードは8文字以上にしてください。" };
+  if (password !== confirm) return { ok: false, message: "2つのパスワードが一致していません。" };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return {
+      ok: false,
+      message: "リンクの有効期限が切れています。もう一度メールを送るところからやり直してください。",
+    };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { ok: false, message: authMessage(error.message) };
+
+  redirect("/records");
+}
+
 /* ================= 記録 ================= */
 
 async function requireUser() {
