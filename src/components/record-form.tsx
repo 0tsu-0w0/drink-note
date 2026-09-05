@@ -224,8 +224,8 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
         {error && <p className="errbox">{error}</p>}
 
         <div className="field">
-          <label>カテゴリ</label>
-          <div className="chips">
+          <span className="flabel" id="lbl-category">カテゴリ</span>
+          <div className="chips" role="group" aria-labelledby="lbl-category">
             {CAT_KEYS.map((k) => (
               <button
                 key={k}
@@ -244,8 +244,8 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
 
         {styleList.length > 0 && (
           <div className="field">
-            <label>種類</label>
-            <div className="chips">
+            <span className="flabel" id="lbl-style">種類</span>
+            <div className="chips" role="group" aria-labelledby="lbl-style">
               {styleList.map((s) => (
                 <button
                   key={s.key}
@@ -271,8 +271,8 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
           {originFields.map((f) =>
             f.type === "choice" ? (
               <div className="field wide" key={f.k}>
-                <label>{f.label}</label>
-                <div className="chips">
+                <span className="flabel" id={`lbl-${f.k}`}>{f.label}</span>
+                <div className="chips" role="group" aria-labelledby={`lbl-${f.k}`}>
                   {f.options!.map((o) => {
                     const bean = f.beans ? beanColor(o) : null;
                     return (
@@ -339,8 +339,8 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
 
         <div className="section-rule">味と香り</div>
 
-        <div className="field">
-          <label>フレーバーノート</label>
+        <div className="field" role="group" aria-labelledby="lbl-flavour">
+          <span className="flabel" id="lbl-flavour">フレーバーノート</span>
           {notes.length > 0 && (
             <div className="notepicked">
               {notes.map((n) => (
@@ -422,8 +422,10 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
           </div>
         </div>
 
-        <div className="field">
-          <label>{cat === "coffee" ? "SCAJ カッピングフォーム" : "評価軸"}</label>
+        <div className="field" role="group" aria-labelledby="lbl-axes">
+          <span className="flabel" id="lbl-axes">
+            {cat === "coffee" ? "SCAJ カッピングフォーム" : "評価軸"}
+          </span>
           <Axes spec={spec} values={axes} onChange={toggleAxis} />
           <div className="axis-foot">
             {spec.scaj ? (

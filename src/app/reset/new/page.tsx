@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { NewPasswordForm } from "@/components/reset-forms";
 
-export const metadata = { title: "新しいパスワード — Sip Notes" };
+export const metadata = { title: "新しいパスワード", robots: { index: false, follow: false } };
 
 export default async function NewPasswordPage() {
   const supabase = await createClient();

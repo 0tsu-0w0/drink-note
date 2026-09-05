@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { ResetRequestForm } from "@/components/reset-forms";
 
-export const metadata = { title: "パスワードの再設定 — Sip Notes" };
+export const metadata = { title: "パスワードの再設定" };
 
 export default function ResetPage() {
   return (

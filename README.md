@@ -72,8 +72,27 @@ npm run dev
 
 1. GitHub リポジトリを Vercel にインポートします（フレームワークは Next.js が自動検出されます）。
 2. **Environment Variables** に `.env.example` と同じ3つを設定します。
-   `NEXT_PUBLIC_SITE_URL` は本番 URL にします。
+   `NEXT_PUBLIC_SITE_URL` は本番 URL にします。ここが本番 URL でないと、
+   確認メールと再設定メールのリンクが localhost に飛んでしまいます。
 3. デプロイ後、Supabase の Redirect URLs に本番の `/auth/callback` を追加します。
+
+## 公開前の確認
+
+| 項目 | あるべき状態 | 確認する場所 |
+| :--- | :--- | :--- |
+| メール確認 | **有効**（オフのままだと他人のメールアドレスでも登録できてしまう） | Supabase → Authentication → Providers → Email → Confirm email |
+| Site URL | 本番 URL | Supabase → Authentication → URL Configuration |
+| Redirect URLs | 本番の `/auth/callback` を登録済み | 同上 |
+| `NEXT_PUBLIC_SITE_URL` | 本番 URL | Vercel → Environment Variables |
+| `service_role` キー | **どこにも置いていない** | リポジトリと Vercel の環境変数 |
+| RLS | `records` と `flavor_vocab` の両方で有効 | Supabase → Table Editor（鍵アイコン） |
+
+新規登録は誰でもできます。自分だけが使う場合は Supabase の
+**Authentication → Sign In / Providers** で新規登録を止められます。
+記録はアカウントごとに分かれるため、開けたままでも他人からは見えません。
+
+メール送信は Supabase の標準機能では 1 時間あたり数通の制限があります。
+人に配るなら **Authentication → Emails → SMTP Settings** で自前の送信元を設定してください。
 
 ## スクリプト
 
@@ -106,7 +125,10 @@ src/
 │   ├── login/, signup/     # 認証画面
 │   ├── reset/, reset/new/  # パスワードの再設定
 │   ├── auth/callback/      # 確認メール・再設定メールからの戻り先
-│   └── records/            # 一覧・新規・編集
+│   ├── records/            # 一覧・新規・編集
+│   ├── error.tsx           # 想定外の失敗
+│   ├── not-found.tsx       # 存在しない記録・URL
+│   └── icon.svg            # タブのアイコン
 ├── components/
 │   ├── header.tsx
 │   ├── auth-form.tsx

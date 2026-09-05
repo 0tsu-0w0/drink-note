@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { RecordsView } from "@/components/records-view";
 import type { DrinkRecord } from "@/lib/types";
 
-export const metadata = { title: "これまでの一杯 — Sip Notes" };
+export const metadata = { title: "これまでの一杯", robots: { index: false, follow: false } };
 
 export default async function RecordsPage() {
   const supabase = await createClient();

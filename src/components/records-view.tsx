@@ -345,12 +345,18 @@ function Entry({
   inPair,
   onDelete,
   busy,
+  confirming,
+  onAskDelete,
+  onCancelDelete,
 }: {
   e: DrinkRecord;
   isSub: boolean;
   inPair: boolean;
   onDelete: (id: string) => void;
   busy: boolean;
+  confirming: boolean;
+  onAskDelete: (id: string) => void;
+  onCancelDelete: () => void;
 }) {
   const d = new Date(e.recorded_at);
   const spec = axesFor(e.category, e.style);
@@ -421,12 +427,31 @@ function Entry({
         {e.memo && <div className="memo">{e.memo}</div>}
       </div>
       <div className="acts">
-        <Link href={`/records/${e.id}/edit`} className="iconbtn">
-          直す
-        </Link>
-        <button type="button" className="iconbtn danger" disabled={busy} onClick={() => onDelete(e.id)}>
-          削除
-        </button>
+        {confirming ? (
+          <>
+            <span className="confirm-ask">本当に削除しますか</span>
+            <button
+              type="button"
+              className="iconbtn danger"
+              disabled={busy}
+              onClick={() => onDelete(e.id)}
+            >
+              {busy ? "削除中…" : "削除する"}
+            </button>
+            <button type="button" className="iconbtn" disabled={busy} onClick={onCancelDelete}>
+              やめる
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href={`/records/${e.id}/edit`} className="iconbtn">
+              直す
+            </Link>
+            <button type="button" className="iconbtn danger" onClick={() => onAskDelete(e.id)}>
+              削除
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -438,6 +463,7 @@ export function RecordsView({ records }: { records: DrinkRecord[] }) {
   const [kind, setKind] = useState<"all" | "drink" | "food">("all");
   const [cat, setCat] = useState<string>("all");
   const [q, setQ] = useState("");
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const filtering = kind !== "all" || cat !== "all" || q.trim() !== "";
@@ -468,6 +494,7 @@ export function RecordsView({ records }: { records: DrinkRecord[] }) {
   function onDelete(id: string) {
     startTransition(async () => {
       await deleteRecord(id);
+      setConfirmId(null);
       router.refresh();
     });
   }
@@ -598,6 +625,9 @@ export function RecordsView({ records }: { records: DrinkRecord[] }) {
                         inPair={members.length > 1}
                         onDelete={onDelete}
                         busy={pending}
+                        confirming={confirmId === e.id}
+                        onAskDelete={setConfirmId}
+                        onCancelDelete={() => setConfirmId(null)}
                       />
                     ))}
                   </div>

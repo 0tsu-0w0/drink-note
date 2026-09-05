@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { AuthForm } from "@/components/auth-form";
 
-export const metadata = { title: "ログイン — Sip Notes" };
+export const metadata = { title: "ログイン" };
 
 export default async function LoginPage({
   searchParams,

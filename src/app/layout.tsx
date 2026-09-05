@@ -1,10 +1,24 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const description =
+  "どこの誰が作った一杯を、何と一緒に、どう味わったか。コーヒー・茶・お酒のテイスティングを書き留めるノートです。";
+
 export const metadata: Metadata = {
-  title: "Sip Notes",
-  description:
-    "どこの誰が作った一杯を、何と一緒に、どう味わったか。コーヒー・茶・お酒のテイスティングを書き留めるノート。",
+  metadataBase: new URL(siteUrl),
+  title: { default: "Sip Notes", template: "%s — Sip Notes" },
+  description,
+  applicationName: "Sip Notes",
+  openGraph: {
+    type: "website",
+    siteName: "Sip Notes",
+    title: "Sip Notes",
+    description,
+    url: siteUrl,
+    locale: "ja_JP",
+  },
+  twitter: { card: "summary_large_image", title: "Sip Notes", description },
 };
 
 export const viewport: Viewport = {

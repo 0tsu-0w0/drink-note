@@ -5,7 +5,7 @@ import { RecordForm } from "@/components/record-form";
 import type { Vocab } from "@/lib/domain";
 import type { DrinkRecord } from "@/lib/types";
 
-export const metadata = { title: "記録を直す — Sip Notes" };
+export const metadata = { title: "記録を直す", robots: { index: false, follow: false } };
 
 export default async function EditRecordPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

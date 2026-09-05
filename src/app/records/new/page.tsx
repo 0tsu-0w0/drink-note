@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { RecordForm } from "@/components/record-form";
 import type { Vocab } from "@/lib/domain";
 
-export const metadata = { title: "一杯を記す — Sip Notes" };
+export const metadata = { title: "一杯を記す", robots: { index: false, follow: false } };
 
 export default async function NewRecordPage() {
   const supabase = await createClient();

@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { AuthForm } from "@/components/auth-form";
 
-export const metadata = { title: "新規登録 — Sip Notes" };
+export const metadata = { title: "新規登録" };
 
 export default function SignupPage() {
   return (
