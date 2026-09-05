@@ -332,7 +332,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
             <input id="rf-when" type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
           </div>
           <div className="field">
-            <label>好み</label>
+            <span className="flabel">好み</span>
             <Stars value={rating} onChange={setRating} />
           </div>
         </div>
@@ -507,15 +507,25 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                         )}
                       </div>
                       <div className="field">
-                        <label>名前</label>
-                        <input type="text" value={p.name} onChange={(e) => patchPairing(i, { name: e.target.value })} />
+                        <label htmlFor={`pair-${i}-name`}>名前</label>
+                        <input
+                          id={`pair-${i}-name`}
+                          type="text"
+                          value={p.name}
+                          onChange={(e) => patchPairing(i, { name: e.target.value })}
+                        />
                       </div>
                       <div className="field">
-                        <label>補助情報</label>
-                        <input type="text" value={p.sub} onChange={(e) => patchPairing(i, { sub: e.target.value })} />
+                        <label htmlFor={`pair-${i}-sub`}>補助情報</label>
+                        <input
+                          id={`pair-${i}-sub`}
+                          type="text"
+                          value={p.sub}
+                          onChange={(e) => patchPairing(i, { sub: e.target.value })}
+                        />
                       </div>
                       <div className="field">
-                        <label>好み</label>
+                        <span className="flabel">好み</span>
                         <Stars mini value={p.rating} onChange={(n) => patchPairing(i, { rating: n })} />
                       </div>
                       <Axes
@@ -529,8 +539,13 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                         }}
                       />
                       <div className="field">
-                        <label>メモ</label>
-                        <input type="text" value={p.memo} onChange={(e) => patchPairing(i, { memo: e.target.value })} />
+                        <label htmlFor={`pair-${i}-memo`}>メモ</label>
+                        <input
+                          id={`pair-${i}-memo`}
+                          type="text"
+                          value={p.memo}
+                          onChange={(e) => patchPairing(i, { memo: e.target.value })}
+                        />
                       </div>
                     </div>
                   ))}
