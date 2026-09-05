@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import { supabaseEnv } from "@/lib/supabase/env";
 
 /**
  * サーバー側の Supabase クライアント。
@@ -8,25 +9,22 @@ import { createServerClient } from "@supabase/ssr";
  */
 export async function createClient() {
   const cookieStore = await cookies();
+  const { url, key } = supabaseEnv();
 
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            for (const { name, value, options } of cookiesToSet) {
-              cookieStore.set(name, value, options);
-            }
-          } catch {
-            /* Server Component からの書き込みは無視してよい */
+  return createServerClient(url, key, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      setAll(cookiesToSet) {
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, options);
           }
-        },
+        } catch {
+          /* Server Component からの書き込みは無視してよい */
+        }
       },
     },
-  );
+  });
 }

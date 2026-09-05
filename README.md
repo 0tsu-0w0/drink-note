@@ -70,11 +70,15 @@ npm run dev
 
 ## Vercel へのデプロイ
 
-1. GitHub リポジトリを Vercel にインポートします（フレームワークは Next.js が自動検出されます）。
-2. **Environment Variables** に `.env.example` と同じ3つを設定します。
-   `NEXT_PUBLIC_SITE_URL` は本番 URL にします。ここが本番 URL でないと、
-   確認メールと再設定メールのリンクが localhost に飛んでしまいます。
-3. デプロイ後、Supabase の Redirect URLs に本番の `/auth/callback` を追加します。
+手順は [docs/deploy-vercel.md](./docs/deploy-vercel.md) にまとめました。要点だけ:
+
+1. Vercel にリポジトリをインポートし、**Deploy を押す前に**環境変数3つを入れる
+2. 発行された本番 URL を `NEXT_PUBLIC_SITE_URL` に入れ直して再デプロイする
+   （環境変数はビルド時に埋め込まれるため、直したら再デプロイが要ります）
+3. Supabase の Site URL と Redirect URLs を本番 URL に合わせる
+
+環境変数が足りないと本番ビルドは止まります（`next.config.ts` で確認しています）。
+デプロイだけ成功して開いた瞬間に落ちる、という事故は起きません。
 
 ## 公開前の確認
 
