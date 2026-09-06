@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signOut } from "@/app/actions";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Header({ email }: { email?: string | null }) {
   return (
@@ -12,6 +13,7 @@ export function Header({ email }: { email?: string | null }) {
           <p className="tagline">どこの誰が作った一杯を、何と一緒に、どう味わったか。</p>
         </div>
         <div className="masthead-right">
+          <ThemeToggle />
           {email ? (
             <>
               <span className="who">{email}</span>
