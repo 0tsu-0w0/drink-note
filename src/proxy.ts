@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { supabaseEnv } from "@/lib/supabase/env";
 
-const PROTECTED = ["/records"];
+const PROTECTED = ["/records", "/insights"];
 const AUTH_PAGES = ["/login", "/signup"];
 
 /** Next.js 16 の Proxy（旧 Middleware）。セッションを更新し、保護ルートを守る。 */

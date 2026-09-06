@@ -16,21 +16,18 @@ export function Header({ email }: { email?: string | null }) {
           <ThemeToggle />
           {email ? (
             <>
-              <span className="who">{email}</span>
-              <Link href="/records/new" className="iconbtn">
-                記録する
-              </Link>
-              <Link href="/records" className="iconbtn">
-                これまでの一杯
-              </Link>
-              <Link href="/reset/new" className="iconbtn">
-                パスワード変更
-              </Link>
-              <form action={signOut}>
-                <button type="submit" className="iconbtn">
-                  ログアウト
-                </button>
-              </form>
+              <nav className="mainnav" aria-label="主な画面">
+                <Link href="/records/new">記録する</Link>
+                <Link href="/records">これまでの一杯</Link>
+                <Link href="/insights">ふりかえり</Link>
+              </nav>
+              <div className="accountbar">
+                <span className="who">{email}</span>
+                <Link href="/reset/new">パスワード変更</Link>
+                <form action={signOut}>
+                  <button type="submit">ログアウト</button>
+                </form>
+              </div>
             </>
           ) : (
             <>

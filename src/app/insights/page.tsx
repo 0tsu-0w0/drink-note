@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
-import { LedgerView } from "@/components/ledger-view";
+import { InsightsView } from "@/components/insights-view";
 import type { DrinkRecord } from "@/lib/types";
 
-export const metadata = { title: "これまでの一杯", robots: { index: false, follow: false } };
+export const metadata = { title: "ふりかえり", robots: { index: false, follow: false } };
 
-export default async function RecordsPage() {
+export default async function InsightsPage() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -26,9 +26,15 @@ export default async function RecordsPage() {
         {error ? (
           <p className="errbox">記録を読み込めませんでした：{error.message}</p>
         ) : (
-          <LedgerView records={(data ?? []) as DrinkRecord[]} />
+          <InsightsView records={(data ?? []) as DrinkRecord[]} />
         )}
       </main>
+      <div className="foot">
+        <p>
+          コーヒーの評価項目は<b>日本スペシャルティコーヒー協会（SCAJ）のカッピングフォーム</b>に倣っています。
+          基礎点36点に8項目を各最大8点で加えて100点満点、<b>80点以上がスペシャルティコーヒー</b>の目安です。
+        </p>
+      </div>
     </>
   );
 }

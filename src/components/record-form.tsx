@@ -215,9 +215,14 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
     <div className="panel">
       <div className="panel-head">
         <h1 className="panel-title">{editing ? "記録を直す" : "一杯を記す"}</h1>
-        <Link href="/records" className="iconbtn">
-          これまでの一杯
-        </Link>
+        <span style={{ display: "flex", gap: 6 }}>
+          <Link href="/records" className="iconbtn">
+            これまでの一杯
+          </Link>
+          <Link href="/insights" className="iconbtn">
+            ふりかえり
+          </Link>
+        </span>
       </div>
 
       <div className="composer-body" style={{ ["--cat" as string]: color }}>
