@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { requestPasswordReset, updatePassword } from "@/app/actions";
+import { requestPasswordReset, resendConfirmation, updatePassword } from "@/app/actions";
 import type { ActionResult } from "@/lib/types";
 
 /** 再設定メールを送ってもらう */
@@ -64,6 +64,38 @@ export function NewPasswordForm() {
       <button type="submit" className="submit" disabled={pending}>
         {pending ? "変更中…" : "パスワードを変える"}
       </button>
+    </form>
+  );
+}
+
+/** 確認メールの再送 */
+export function ResendConfirmationForm() {
+  const [state, formAction, pending] = useActionState<ActionResult | null, FormData>(
+    resendConfirmation,
+    null,
+  );
+  const isNotice = state && !state.ok && /送り直しました|確認済み/.test(state.message);
+
+  return (
+    <form action={formAction} className="composer-body" style={{ padding: 0, gap: 16 }}>
+      {state && !state.ok && (
+        <p className={isNotice ? "okbox" : "errbox"} role="status">
+          {state.message}
+        </p>
+      )}
+      <p className="hint" style={{ textAlign: "left", lineHeight: 1.8 }}>
+        登録したのに確認メールが届かない、リンクが開けない場合は、ここから送り直せます。
+      </p>
+      <div className="field">
+        <label htmlFor="email">メールアドレス</label>
+        <input id="email" name="email" type="email" autoComplete="email" required />
+      </div>
+      <button type="submit" className="submit" disabled={pending}>
+        {pending ? "送信中…" : "確認メールを送り直す"}
+      </button>
+      <p className="hint">
+        <Link href="/login">ログインに戻る</Link>
+      </p>
     </form>
   );
 }

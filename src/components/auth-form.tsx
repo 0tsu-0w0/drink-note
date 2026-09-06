@@ -39,19 +39,18 @@ export function AuthForm({ mode, next }: { mode: "login" | "signup"; next?: stri
       <button type="submit" className="submit" disabled={pending}>
         {pending ? "送信中…" : mode === "login" ? "ログイン" : "登録する"}
       </button>
-      <p className="hint">
-        {mode === "login" ? (
-          <>
-            はじめての方は <Link href="/signup">新規登録</Link>
-            <br />
-            パスワードを忘れた方は <Link href="/reset">再設定</Link>
-          </>
-        ) : (
-          <>
-            すでにお持ちの方は <Link href="/login">ログイン</Link>
-          </>
-        )}
-      </p>
+      {mode === "login" ? (
+        <div className="authlinks">
+          <Link href="/reset">パスワードを忘れた</Link>
+          <Link href="/resend">確認メールが届かない</Link>
+          <Link href="/signup">新規登録はこちら</Link>
+        </div>
+      ) : (
+        <div className="authlinks">
+          <Link href="/login">すでにお持ちの方はログイン</Link>
+          <Link href="/resend">確認メールが届かない</Link>
+        </div>
+      )}
     </form>
   );
 }

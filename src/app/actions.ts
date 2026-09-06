@@ -62,9 +62,51 @@ export async function signUp(_prev: ActionResult | null, formData: FormData): Pr
 
   /* メール確認が必要な設定のときはセッションが返らない */
   if (!data.session) {
-    return { ok: false, message: `${email} に確認メールを送りました。メール内のリンクを開くと登録が完了します。` };
+    return {
+      ok: false,
+      message:
+        `${email} に確認メールを送りました。メール内のリンクを開くと登録が完了します。` +
+        "届かない場合は迷惑メールも確認し、それでも無ければ「確認メールが届かない」から送り直してください。",
+    };
   }
   redirect("/records");
+}
+
+/** 確認メールをもう一度送る。届かない・リンクが開けないときの逃げ道。 */
+export async function resendConfirmation(
+  _prev: ActionResult | null,
+  formData: FormData,
+): Promise<ActionResult> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { ok: false, message: "メールアドレスを入れてください。" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+    options: { emailRedirectTo: `${await siteUrl()}/auth/callback` },
+  });
+
+  if (error) {
+    const m = error.message.toLowerCase();
+    if (/rate limit|too many|for security purposes/.test(m)) {
+      return {
+        ok: false,
+        message:
+          "送信が続いたため一時的に制限されています。しばらく待ってからやり直してください。",
+      };
+    }
+    if (m.includes("already confirmed")) {
+      return { ok: false, message: "このメールアドレスは確認済みです。そのままログインできます。" };
+    }
+    return { ok: false, message: authMessage(error.message) };
+  }
+
+  /* 宛先の登録状況は明かさない */
+  return {
+    ok: false,
+    message: `${email} が未確認の登録として残っていれば、確認メールを送り直しました。`,
+  };
 }
 
 export async function signOut() {

@@ -284,3 +284,13 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.75}
 /* 削除の確認 */
 .confirm-ask{font-size:11.5px; color:var(--over); align-self:center; white-space:nowrap}
 .card .acts:has(.confirm-ask){opacity:1}
+
+/* 認証画面の導線 */
+.authlinks{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line); margin-top:4px}
+.authlinks a{
+  display:block; padding:11px 2px; font-size:13px; text-decoration:none;
+  border-bottom:1px solid var(--line); color:var(--accent);
+}
+.authlinks a:last-child{border-bottom:0}
+.authlinks a:hover{text-decoration:underline; text-underline-offset:3px}
+.authlinks a::after{content:" →"; color:var(--muted)}
