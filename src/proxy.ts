@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
 
   if (user && AUTH_PAGES.some((p) => path.startsWith(p))) {
     const url = request.nextUrl.clone();
-    url.pathname = "/records";
+    url.pathname = "/records/new";
     url.search = "";
     return NextResponse.redirect(url);
   }

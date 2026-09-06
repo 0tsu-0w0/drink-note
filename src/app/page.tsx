@@ -8,7 +8,7 @@ export default async function LandingPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) redirect("/records");
+  if (user) redirect("/records/new");
 
   const points = [
     {

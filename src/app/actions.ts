@@ -81,8 +81,8 @@ export async function signIn(_prev: ActionResult | null, formData: FormData): Pr
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { ok: false, message: authMessage(error) };
 
-  const next = String(formData.get("next") ?? "/records");
-  redirect(next.startsWith("/") ? next : "/records");
+  const next = String(formData.get("next") ?? "/records/new");
+  redirect(next.startsWith("/") ? next : "/records/new");
 }
 
 export async function signUp(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
@@ -108,7 +108,7 @@ export async function signUp(_prev: ActionResult | null, formData: FormData): Pr
         "届かない場合は迷惑メールも確認し、それでも無ければ「確認メールが届かない」から送り直してください。",
     };
   }
-  redirect("/records");
+  redirect("/records/new");
 }
 
 /** 確認メールをもう一度送る。届かない・リンクが開けないときの逃げ道。 */
@@ -193,7 +193,7 @@ export async function updatePassword(
   const { error } = await supabase.auth.updateUser({ password });
   if (error) return { ok: false, message: authMessage(error) };
 
-  redirect("/records");
+  redirect("/records/new");
 }
 
 /* ================= 記録 ================= */

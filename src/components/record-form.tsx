@@ -216,7 +216,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
       <div className="panel-head">
         <h1 className="panel-title">{editing ? "記録を直す" : "一杯を記す"}</h1>
         <Link href="/records" className="iconbtn">
-          一覧へ戻る
+          これまでの一杯
         </Link>
       </div>
 
