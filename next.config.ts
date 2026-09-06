@@ -23,6 +23,11 @@ if (process.env.NODE_ENV === "production") {
   }
 }
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  /* OGP画像の生成で読むフォントを、本番の実行環境にも同梱する */
+  outputFileTracingIncludes: {
+    "/opengraph-image": ["./assets/**"],
+  },
+};
 
 export default nextConfig;
