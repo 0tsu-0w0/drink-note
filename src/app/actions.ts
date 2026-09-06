@@ -18,19 +18,54 @@ import {
 
 /* ================= 認証 ================= */
 
-/** Supabase の英語エラーを日本語にして、何をすればいいかまで伝える */
-function authMessage(raw: string): string {
+type AuthErrorLike = { code?: string | null; message: string };
+
+/**
+ * Supabase の英語エラーを日本語にして、次に何をすればいいかまで伝える。
+ * 文面は版によって変わるので、まずエラーコードで判定し、無い場合だけ本文を見る。
+ */
+function authMessage(err: AuthErrorLike | string): string {
+  const code = typeof err === "string" ? "" : (err.code ?? "");
+  const raw = typeof err === "string" ? err : err.message;
   const m = raw.toLowerCase();
-  if (m.includes("invalid login credentials")) return "メールアドレスかパスワードが違います。";
-  if (m.includes("email not confirmed")) return "メールの確認がまだ済んでいません。届いた確認メールのリンクを開いてください。";
-  if (m.includes("user already registered") || m.includes("already been registered"))
+
+  const has = (...needles: string[]) => needles.some((n) => m.includes(n));
+
+  if (code === "same_password" || has("should be different from the old password"))
+    return "いま使っているパスワードと同じです。別のパスワードを入れてください。";
+
+  if (code === "weak_password" || has("password is known to be weak", "weak password"))
+    return "推測されやすいパスワードです。別の文字列にしてください。";
+
+  if (code === "invalid_credentials" || has("invalid login credentials"))
+    return "メールアドレスかパスワードが違います。";
+
+  if (code === "email_not_confirmed" || has("email not confirmed"))
+    return "メールの確認がまだ済んでいません。届いた確認メールのリンクを開いてください。届いていない場合は「確認メールが届かない」から送り直せます。";
+
+  if (code === "email_exists" || code === "user_already_exists" || has("already registered", "already been registered"))
     return "このメールアドレスは登録済みです。ログインしてください。";
-  if (m.includes("password should be at least")) return "パスワードは6文字以上にしてください。";
-  if (m.includes("rate limit") || m.includes("too many"))
+
+  if (code === "otp_expired" || has("is invalid or has expired", "token has expired"))
+    return "リンクの有効期限が切れています。もう一度メールを送るところからやり直してください。";
+
+  if (code === "signup_disabled" || has("signups not allowed"))
+    return "現在、新規登録を受け付けていません。";
+
+  if (has("password should be at least"))
+    return "パスワードが短すぎます。8文字以上にしてください。";
+
+  if (code === "over_request_rate_limit" || code === "over_email_send_rate_limit" || has("rate limit", "too many", "for security purposes"))
     return "試行が続いたため一時的に制限されています。しばらく待ってからやり直してください。";
-  if (m.includes("unable to validate email") || m.includes("invalid format"))
+
+  if (has("unable to validate email", "invalid format"))
     return "メールアドレスの形式が正しくありません。";
-  return "うまくいきませんでした：" + raw;
+
+  if (code === "session_not_found" || has("auth session missing", "session not found", "jwt expired"))
+    return "ログイン状態が切れています。もう一度ログインしてください。";
+
+  /* 未知のものは、こちらで直せるように原文も添える */
+  return `うまくいきませんでした。時間をおいてやり直してください。（${raw}）`;
 }
 
 export async function signIn(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
@@ -40,7 +75,7 @@ export async function signIn(_prev: ActionResult | null, formData: FormData): Pr
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { ok: false, message: authMessage(error.message) };
+  if (error) return { ok: false, message: authMessage(error) };
 
   const next = String(formData.get("next") ?? "/records");
   redirect(next.startsWith("/") ? next : "/records");
@@ -58,7 +93,7 @@ export async function signUp(_prev: ActionResult | null, formData: FormData): Pr
     password,
     options: { emailRedirectTo: `${await siteUrl()}/auth/callback` },
   });
-  if (error) return { ok: false, message: authMessage(error.message) };
+  if (error) return { ok: false, message: authMessage(error) };
 
   /* メール確認が必要な設定のときはセッションが返らない */
   if (!data.session) {
@@ -88,18 +123,10 @@ export async function resendConfirmation(
   });
 
   if (error) {
-    const m = error.message.toLowerCase();
-    if (/rate limit|too many|for security purposes/.test(m)) {
-      return {
-        ok: false,
-        message:
-          "送信が続いたため一時的に制限されています。しばらく待ってからやり直してください。",
-      };
-    }
-    if (m.includes("already confirmed")) {
+    if (error.message.toLowerCase().includes("already confirmed")) {
       return { ok: false, message: "このメールアドレスは確認済みです。そのままログインできます。" };
     }
-    return { ok: false, message: authMessage(error.message) };
+    return { ok: false, message: authMessage(error) };
   }
 
   /* 宛先の登録状況は明かさない */
@@ -160,7 +187,7 @@ export async function updatePassword(
   }
 
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) return { ok: false, message: authMessage(error.message) };
+  if (error) return { ok: false, message: authMessage(error) };
 
   redirect("/records");
 }
