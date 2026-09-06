@@ -55,8 +55,12 @@ function authMessage(err: AuthErrorLike | string): string {
   if (has("password should be at least"))
     return "パスワードが短すぎます。8文字以上にしてください。";
 
-  if (code === "over_request_rate_limit" || code === "over_email_send_rate_limit" || has("rate limit", "too many", "for security purposes"))
-    return "試行が続いたため一時的に制限されています。しばらく待ってからやり直してください。";
+  /* メール送信の上限と、操作回数の上限は原因も待ち時間も違うので分けて伝える */
+  if (code === "over_email_send_rate_limit" || has("email rate limit", "over_email_send_rate_limit"))
+    return "メールの送信数が上限に達しました。1時間ほど待つと送れるようになります。";
+
+  if (code === "over_request_rate_limit" || has("rate limit", "too many", "for security purposes"))
+    return "操作が続いたため一時的に制限されています。1分ほど待ってからやり直してください。";
 
   if (has("unable to validate email", "invalid format"))
     return "メールアドレスの形式が正しくありません。";
