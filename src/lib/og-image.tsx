@@ -3,9 +3,8 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { ROASTS } from "@/lib/domain";
 
-export const alt = "Sip Notes — コーヒー・茶・お酒のテイスティングノート";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const OG_ALT = "Sip Notes — コーヒー・茶・お酒のテイスティングノート";
+export const OG_SIZE = { width: 1200, height: 630 };
 
 /* 系統の色。アプリ内の配色をそのまま使う。 */
 const FAMILY = ["#6B4225", "#A65A22", "#4C7A3C", "#7C2F4E", "#574A8C", "#3A6B87"];
@@ -17,7 +16,7 @@ const FAMILY = ["#6B4225", "#A65A22", "#4C7A3C", "#7C2F4E", "#574A8C", "#3A6B87"
  * 日本語を入れると豆腐（□）になる。ワードマークだけはアプリと同じ Fraunces を
  * 同梱して読み込む（読めなければ既定フォントで描かれる）。
  */
-export default async function OpengraphImage() {
+export async function renderOgImage() {
   /* 書体を渡すと既定のフォントは使われなくなるので、太字と通常の両方を登録する */
   let fonts;
   try {
@@ -112,6 +111,11 @@ export default async function OpengraphImage() {
         </div>
       </div>
     ),
-    { ...size, fonts },
+    { ...OG_SIZE, fonts,
+      headers: {
+        /* 画像はデプロイごとにしか変わらない。取得のたびに作り直させない。 */
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+      },
+    },
   );
 }

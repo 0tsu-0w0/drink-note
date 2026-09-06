@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { themeBootScript } from "@/components/theme-toggle";
 import { siteUrl } from "@/lib/site-url";
+import { OG_ALT, OG_SIZE } from "@/lib/og-image";
 
 const description =
   "どこの誰が作った一杯を、何と一緒に、どう味わったか。コーヒー・茶・お酒のテイスティングを書き留めるノートです。";
@@ -13,6 +14,13 @@ const description =
  */
 export async function generateMetadata(): Promise<Metadata> {
   const url = await siteUrl();
+  const image = {
+    url: `${url}/og.png`,
+    width: OG_SIZE.width,
+    height: OG_SIZE.height,
+    alt: OG_ALT,
+    type: "image/png",
+  };
   return {
     metadataBase: new URL(url),
     title: { default: "Sip Notes", template: "%s — Sip Notes" },
@@ -25,8 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       locale: "ja_JP",
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title: "Sip Notes", description },
+    twitter: {
+      card: "summary_large_image",
+      title: "Sip Notes",
+      description,
+      images: [image],
+    },
   };
 }
 
