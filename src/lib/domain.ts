@@ -376,6 +376,8 @@ export function beanColor(v: string): string | null {
 export type OriginField = {
   k: string;
   label: string;
+  /** 薄く表示する記入例。何を書く欄なのかを示すためのもので、初期値ではない。 */
+  ph?: string;
   wide?: boolean;
   type?: "text" | "num" | "choice";
   unit?: string;
@@ -384,26 +386,26 @@ export type OriginField = {
 };
 
 const LIQUOR_ORIGIN: OriginField[] = [
-  { k: "origin", label: "産地", wide: true },
-  { k: "maker", label: "蔵元・メーカー", wide: true },
-  { k: "variety", label: "原料・品種" },
-  { k: "vintage", label: "年" },
-  { k: "abv", label: "度数", type: "num", unit: "%" },
+  { k: "origin", label: "産地", ph: "ブルゴーニュ、新潟", wide: true },
+  { k: "maker", label: "蔵元・メーカー", ph: "蔵元・醸造所・ドメーヌ", wide: true },
+  { k: "variety", label: "原料・品種", ph: "山田錦、ピノ・ノワール" },
+  { k: "vintage", label: "年", ph: "2021 / R5BY" },
+  { k: "abv", label: "度数", type: "num", unit: "%", ph: "15" },
 ];
 
 const ORIGIN_BASE: Record<Category, OriginField[]> = {
   coffee: [
-    { k: "origin", label: "産地", wide: true },
-    { k: "farm", label: "農園", wide: true },
-    { k: "maker", label: "焙煎者" },
-    { k: "variety", label: "品種" },
+    { k: "origin", label: "産地", ph: "エチオピア イルガチェフェ", wide: true },
+    { k: "farm", label: "農園", ph: "コンガ ウォッシングステーション", wide: true },
+    { k: "maker", label: "焙煎者", ph: "焙煎した店・人" },
+    { k: "variety", label: "品種", ph: "ゲイシャ、在来種" },
     { k: "grade", label: "焙煎度", type: "choice", options: ROASTS.map((r) => r.v), beans: true },
   ],
   tea: [
-    { k: "origin", label: "産地", wide: true },
-    { k: "farm", label: "茶園", wide: true },
-    { k: "maker", label: "ブランド・製茶者" },
-    { k: "variety", label: "品種" },
+    { k: "origin", label: "産地", ph: "インド ダージリン", wide: true },
+    { k: "farm", label: "茶園", ph: "キャッスルトン", wide: true },
+    { k: "maker", label: "ブランド・製茶者", ph: "店名・ブランド" },
+    { k: "variety", label: "品種", ph: "中国種、アッサム種" },
     {
       k: "grade",
       label: "摘み・グレード",
@@ -412,10 +414,10 @@ const ORIGIN_BASE: Record<Category, OriginField[]> = {
     },
   ],
   green: [
-    { k: "origin", label: "産地", wide: true },
-    { k: "farm", label: "茶園", wide: true },
-    { k: "maker", label: "茶舗" },
-    { k: "variety", label: "品種" },
+    { k: "origin", label: "産地", ph: "福岡 八女、京都 宇治", wide: true },
+    { k: "farm", label: "茶園", ph: "茶園名", wide: true },
+    { k: "maker", label: "茶舗", ph: "店名" },
+    { k: "variety", label: "品種", ph: "やぶきた、さえみどり" },
     { k: "grade", label: "火入れ", type: "choice", options: ["弱火入れ", "中火入れ", "強火入れ"] },
   ],
   sake: LIQUOR_ORIGIN,
@@ -426,22 +428,61 @@ const ORIGIN_BASE: Record<Category, OriginField[]> = {
   whiskey: LIQUOR_ORIGIN,
   liqueur: LIQUOR_ORIGIN,
   cocktail: LIQUOR_ORIGIN,
-  food: [{ k: "maker", label: "店・作り手", wide: true }],
+  food: [{ k: "maker", label: "店・作り手", ph: "店名、自分で作った など", wide: true }],
   other: [
-    { k: "origin", label: "産地", wide: true },
-    { k: "maker", label: "造り手・ブランド", wide: true },
+    { k: "origin", label: "産地", ph: "産地・地域", wide: true },
+    { k: "maker", label: "造り手・ブランド", ph: "メーカー名", wide: true },
   ],
 };
 
+/** 補助情報に何を書くかはカテゴリで違うので、例も変える */
+const SUB_INFO_PH: Partial<Record<Category, string>> = {
+  coffee: "精製方法、標高、焙煎日 など",
+  tea: "摘採期、等級 など",
+  green: "火入れの具合、収穫期 など",
+  sake: "精米歩合、酵母 など",
+  beer: "ホップ品種、IBU など",
+  wine: "畑、樽熟成の有無 など",
+  sour: "ベース酒、割り方 など",
+  shochu: "蒸留方法、熟成年数 など",
+  whiskey: "蒸留所、熟成年数、樽 など",
+  liqueur: "ベース酒、風味 など",
+  cocktail: "ベース酒、作り方 など",
+  food: "料理のジャンル、材料 など",
+};
+
 /** すべてのカテゴリに共通で付く欄 */
-const COMMON_ORIGIN: OriginField[] = [
-  { k: "subInfo", label: "補助情報", wide: true },
-  { k: "place", label: "場所", wide: true },
-];
+function commonOrigin(cat: Category): OriginField[] {
+  return [
+    { k: "subInfo", label: "補助情報", ph: SUB_INFO_PH[cat] ?? "書き添えておきたいこと", wide: true },
+    { k: "place", label: "場所", ph: "自宅、店名", wide: true },
+  ];
+}
 
 export function originOf(cat: string): OriginField[] {
   const key: Category = isCategory(cat) ? cat : "other";
-  return [...ORIGIN_BASE[key], ...COMMON_ORIGIN];
+  return [...ORIGIN_BASE[key], ...commonOrigin(key)];
+}
+
+/** 名前の欄に薄く出す記入例 */
+const NAME_PH: Record<Category, string> = {
+  coffee: "イルガチェフェ コンガ",
+  tea: "ダージリン セカンドフラッシュ",
+  green: "八女の煎茶",
+  sake: "純米吟醸 ○○",
+  beer: "ペールエール",
+  wine: "シャブリ",
+  sour: "レモンサワー",
+  shochu: "芋焼酎 ○○",
+  whiskey: "バッファロートレース",
+  liqueur: "梅酒",
+  cocktail: "ジントニック",
+  food: "スコーン、枝豆",
+  other: "飲んだものの名前",
+};
+
+export function namePlaceholder(cat: string): string {
+  return NAME_PH[isCategory(cat) ? cat : "other"];
 }
 
 /* ================= フレーバーの語彙 ================= */

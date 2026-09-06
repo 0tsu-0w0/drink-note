@@ -15,6 +15,7 @@ import {
   flavorsOf,
   isFood,
   isKnownNote,
+  namePlaceholder,
   originOf,
   scajTotal,
   stylesOf,
@@ -268,7 +269,13 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
 
         <div className="field">
           <label htmlFor="rf-name">名前</label>
-          <input id="rf-name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            id="rf-name"
+            type="text"
+            value={name}
+            placeholder={namePlaceholder(cat)}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
 
         <div className="section-rule">素性</div>
@@ -314,6 +321,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                       max={96}
                       step={0.5}
                       value={origin[f.k] ?? ""}
+                      placeholder={f.ph}
                       onChange={(e) => setOrigin({ ...origin, [f.k]: e.target.value })}
                     />
                     <span className="unit">{f.unit}</span>
@@ -323,6 +331,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                     id={`rf-${f.k}`}
                     type="text"
                     value={origin[f.k] ?? ""}
+                    placeholder={f.ph}
                     onChange={(e) => setOrigin({ ...origin, [f.k]: e.target.value })}
                   />
                 )}
@@ -519,6 +528,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                           id={`pair-${i}-name`}
                           type="text"
                           value={p.name}
+                          placeholder="スコーン、枝豆"
                           onChange={(e) => patchPairing(i, { name: e.target.value })}
                         />
                       </div>
@@ -528,6 +538,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                           id={`pair-${i}-sub`}
                           type="text"
                           value={p.sub}
+                          placeholder="料理のジャンル、材料 など"
                           onChange={(e) => patchPairing(i, { sub: e.target.value })}
                         />
                       </div>
@@ -551,6 +562,7 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
                           id={`pair-${i}-memo`}
                           type="text"
                           value={p.memo}
+                          placeholder="合わせた感想"
                           onChange={(e) => patchPairing(i, { memo: e.target.value })}
                         />
                       </div>
@@ -571,7 +583,12 @@ export function RecordForm({ vocab: initialVocab, record }: Props) {
 
         <div className="field">
           <label htmlFor="rf-memo">メモ</label>
-          <textarea id="rf-memo" value={memo} onChange={(e) => setMemo(e.target.value)} />
+          <textarea
+            id="rf-memo"
+            value={memo}
+            placeholder="冷めるにつれて紅茶のような余韻。次は湯温を下げてみる。"
+            onChange={(e) => setMemo(e.target.value)}
+          />
         </div>
 
         <button type="button" className="submit" onClick={submit} disabled={pending}>
