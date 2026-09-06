@@ -1,30 +1,34 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { themeBootScript } from "@/components/theme-toggle";
+import { siteUrl } from "@/lib/site-url";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
 const description =
   "どこの誰が作った一杯を、何と一緒に、どう味わったか。コーヒー・茶・お酒のテイスティングを書き留めるノートです。";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: "Sip Notes", template: "%s — Sip Notes" },
-  description,
-  applicationName: "Sip Notes",
-  openGraph: {
-    type: "website",
-    siteName: "Sip Notes",
-    title: "Sip Notes",
+/**
+ * og:url と og:image は実際にアクセスされているドメインから組み立てる。
+ * 環境変数に頼ると、値が古いままでも画面は動くのに、共有したときだけ
+ * 画像が出ない、という気づきにくい壊れ方をする。
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const url = await siteUrl();
+  return {
+    metadataBase: new URL(url),
+    title: { default: "Sip Notes", template: "%s — Sip Notes" },
     description,
-    url: siteUrl,
-    locale: "ja_JP",
-  },
-  twitter: { card: "summary_large_image", title: "Sip Notes", description },
-};
+    applicationName: "Sip Notes",
+    openGraph: {
+      type: "website",
+      siteName: "Sip Notes",
+      title: "Sip Notes",
+      description,
+      url,
+      locale: "ja_JP",
+    },
+    twitter: { card: "summary_large_image", title: "Sip Notes", description },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
