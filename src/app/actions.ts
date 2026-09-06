@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { siteUrl } from "@/lib/site-url";
+import { safeNextPath } from "@/lib/safe-path";
 import type { ActionResult, PairingInput } from "@/lib/types";
 import {
   AXES,
@@ -81,8 +82,7 @@ export async function signIn(_prev: ActionResult | null, formData: FormData): Pr
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { ok: false, message: authMessage(error) };
 
-  const next = String(formData.get("next") ?? "/records/new");
-  redirect(next.startsWith("/") ? next : "/records/new");
+  redirect(safeNextPath(formData.get("next")));
 }
 
 export async function signUp(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
