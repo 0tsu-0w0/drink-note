@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { siteUrl } from "@/lib/site-url";
 import type { ActionResult, PairingInput } from "@/lib/types";
 import {
   AXES,
@@ -16,10 +17,6 @@ import {
 } from "@/lib/domain";
 
 /* ================= 認証 ================= */
-
-function siteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-}
 
 /** Supabase の英語エラーを日本語にして、何をすればいいかまで伝える */
 function authMessage(raw: string): string {
@@ -59,7 +56,7 @@ export async function signUp(_prev: ActionResult | null, formData: FormData): Pr
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${siteUrl()}/auth/callback` },
+    options: { emailRedirectTo: `${await siteUrl()}/auth/callback` },
   });
   if (error) return { ok: false, message: authMessage(error.message) };
 
@@ -86,7 +83,7 @@ export async function requestPasswordReset(
 
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${siteUrl()}/auth/callback?next=/reset/new`,
+    redirectTo: `${await siteUrl()}/auth/callback?next=/reset/new`,
   });
 
   /* 実際の結果に関わらず同じ文面を返す。ただし送信制限だけは伝える。 */
